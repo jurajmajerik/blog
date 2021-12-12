@@ -1,52 +1,32 @@
 import * as React from 'react'
-import { Link, useStaticQuery, graphql } from 'gatsby'
-import {
-  container,
-  heading,
-  navLinks,
-  navLinkItem,
-  navLinkText,
-  siteTitle,
-} from './layout.module.css'
+import { Link } from 'gatsby'
+import { StaticImage } from 'gatsby-plugin-image'
+import './layout.css'
+import '@fontsource/inter'
+import '@fontsource/inter/500.css'
+import '@fontsource/ubuntu'
 
 const Layout = ({ pageTitle, children }) => {
-    const data = useStaticQuery(graphql`
-    query {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
 
   return (
-    <div className={container}>
+    <div className="container">
       <aside>
-        <title>{pageTitle} | {data.site.siteMetadata.title}</title>
-        <header className={siteTitle}>{data.site.siteMetadata.title}</header>
-        {/* <nav>
-          <ul className={navLinks}>
-            <li className={navLinkItem}>
-              <Link to="/" className={navLinkText}>
-                Home
-              </Link>
-            </li>
-            <li className={navLinkItem}>
-              <Link to="/about" className={navLinkText}>
-                About
-              </Link>
-            </li>
-            <li className={navLinkItem}>
-              <Link to="/blog" className={navLinkText}>
-                Blog
-              </Link>
-            </li>
-          </ul>
-        </nav> */}
+        <div className="title">
+          <Link to="/">
+            <h1>Juraj Majerik</h1>
+          </Link>
+        </div>
+        <StaticImage
+          className="img-profile"
+          src="../images/profile-1.jpg"
+          alt="Profile photo"
+        />
+        <div className="about">
+          I'm Juraj, a software engineer based in Amsterdam.
+        </div>
       </aside>
       <main>
-        <h1 className={heading}>{pageTitle}</h1>
+        <h1 className="heading">{pageTitle}</h1>
         {children}
       </main>
     </div>

@@ -1,23 +1,27 @@
 import * as React from 'react'
 import { Link, graphql } from 'gatsby'
 import Layout from '../components/layout'
-import { StaticImage } from 'gatsby-plugin-image'
+
 
 const IndexPage = ({ data }) => {
   return (
-    <Layout pageTitle="My Blog Posts">
-      {
-        data.allMdx.nodes.map(node => (
-          <article key={node.id}>
-            <h2>
-              <Link to={`/blog/${node.slug}`}>
-                {node.frontmatter.title}
-              </Link>
-            </h2>
-            <p>Posted: {node.frontmatter.date}</p>
-          </article>
-        ))
-      }
+    <Layout>
+      <div className="posts">
+        <ul>
+          {
+            data.allMdx.nodes.map(node => (
+              <li key={node.id}>
+                <h2>
+                  <Link to={`/blog/${node.slug}`}>
+                    {node.frontmatter.title}
+                  </Link>
+                </h2>
+                <p>Posted: {node.frontmatter.date}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </Layout>
   )
 }
