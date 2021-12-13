@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
-import './layout.css'
 import '@fontsource/inter'
 import '@fontsource/inter/500.css'
 import '@fontsource/ubuntu'
+import './layout.css'
 
 const Layout = ({ pageTitle, children }) => {
 

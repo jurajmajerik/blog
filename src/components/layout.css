@@ -4,6 +4,7 @@ body {
 }
 
 a {
+    color: #000;
     text-decoration: none;
 }
 
@@ -79,8 +80,7 @@ main {
     border: solid 1px #ececec;
     width: 150px !important;
     margin: auto !important;
-    display: block;
-    /* transform: translateY(50px); */
+    display: block !important;
 }
 
 .posts ul {
