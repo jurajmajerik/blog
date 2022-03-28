@@ -14,12 +14,6 @@ const BlogPost = ({ data }) => {
         image={image}
         alt={data.mdx.frontmatter.hero_image_alt}
       />
-      <p>
-        Photo Credit:{" "}
-        <a href={data.mdx.frontmatter.hero_image_credit_link}>
-          {data.mdx.frontmatter.hero_image_credit_text}
-        </a>
-      </p>
       <MDXRenderer>
         {data.mdx.body}
       </MDXRenderer>
@@ -35,8 +29,6 @@ export const query = graphql`
         title
         date(formatString: "MMMM DD, YYYY")
         hero_image_alt
-        hero_image_credit_link
-        hero_image_credit_text
         hero_image {
           childImageSharp {
             gatsbyImageData
