@@ -4,25 +4,20 @@ import Layout from '../components/layout'
 
 
 const IndexPage = ({ data }) => {
-
   return (
     <Layout>
-      <div className="posts">
-        <ul>
-          {
-            data.allMdx.nodes.map(node => (
-              <li key={node.id}>
-                <h2>
-                  <Link to={`/blog/${node.slug}`}>
-                    {node.frontmatter.title}
-                  </Link>
-                </h2>
-                <p>Posted: {node.frontmatter.date}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
+      {
+        data.allMdx.nodes.map(node => (
+          <article className='post' key={node.id}>
+            <h2>
+              <Link to={`/blog/${node.slug}`}>
+                {node.frontmatter.title}
+              </Link>
+            </h2>
+            <p className='meta'>{node.frontmatter.date}</p>
+          </article>
+        ))
+      }
     </Layout>
   )
 }

@@ -9,14 +9,18 @@ const BlogPost = ({ data }) => {
 
   return (
     <Layout pageTitle={data.mdx.frontmatter.title}>
-      <p>Posted: {data.mdx.frontmatter.date}</p>
-      <GatsbyImage
-        image={image}
-        alt={data.mdx.frontmatter.hero_image_alt}
-      />
-      <MDXRenderer>
-        {data.mdx.body}
-      </MDXRenderer>
+      <article className='post'>
+        <h1 className="heading">{data.mdx.frontmatter.title}</h1>
+        <p className='meta'>{data.mdx.frontmatter.date}</p>
+        <GatsbyImage
+          image={image}
+          alt={data.mdx.frontmatter.hero_image_alt}
+        />
+        <caption>{data.mdx.frontmatter.hero_image_alt}</caption>
+        <MDXRenderer>
+          {data.mdx.body}
+        </MDXRenderer>
+      </article>
     </Layout>
   )
 }

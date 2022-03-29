@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
-import '@fontsource/inter'
+import '@fontsource/merriweather'
 import '@fontsource/inter/500.css'
-import '@fontsource/ubuntu'
 import './layout.css'
 
 const Layout = ({ pageTitle, children }) => {
@@ -26,7 +25,6 @@ const Layout = ({ pageTitle, children }) => {
         </div>
       </aside>
       <main>
-        <h1 className="heading">{pageTitle}</h1>
         {children}
       </main>
     </div>
