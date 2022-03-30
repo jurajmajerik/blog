@@ -7,8 +7,15 @@ const IndexPage = ({ data }) => {
   return (
     <Layout>
       {
-        data.allMdx.nodes.map(node => (
-          <article className='post' key={node.id}>
+        data.allMdx.nodes.map((node, index) => (
+          <article className='post post-home' key={node.id}>
+            <span className='path-circle' />
+            <span className='path-line-vertical' />
+            {
+              index === data.allMdx.nodes.length - 1 ?
+              <span className='path-line-end' /> :
+              null
+            }
             <h2>
               <Link to={`/blog/${node.slug}`}>
                 {node.frontmatter.title}

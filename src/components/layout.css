@@ -5,7 +5,7 @@ html {
 }
 
 body {
-    font-family: 'Merriweather', 'Georgia', serif;
+    font-family: 'Inter', 'Georgia', serif;
     font-weight: 400;
     word-wrap: break-word;
     font-kerning: normal;
@@ -142,9 +142,6 @@ article a {
     text-decoration: none;
     transition-duration: .2s;
     transition-property: color;
-    /* background-image: linear-gradient(90deg,#ff4d4d,#f9cb28); */
-    /* -webkit-background-clip: text; */
-    /* -webkit-text-fill-color: transparent; */
 }
 
 article a:hover {
@@ -152,19 +149,54 @@ article a:hover {
 }
 
 .post {
-    width: 85%;
-    max-width: 900px;
 }
 
-.post {
+.post-home {
     position: relative;
-    width: 80%;
-    max-width: 710px;
-    margin-bottom: 4rem;
-    margin-left: 10%;
-    padding-bottom: 4rem;
-    border-bottom: #EBF2F6 1px solid;
-    word-wrap: break-word;
+    padding: 0;
+    height: 100px;
+}
+
+.post-home h2 {
+    margin: 0;
+    position: absolute;
+    top: 20px;
+    left: 40px;
+}
+
+.post-home p.meta {
+    margin: 0;
+    position: absolute;
+    top: 60px;
+    left: 40px;
+}
+
+.post-home span.path-circle {
+    position: absolute;
+    top: 35px;
+    left: 17px;
+    width: 11px;
+    height: 11px;
+    box-shadow: 0 0 0 1.5px gray inset;
+    border-radius: 50%;
+}
+
+.post-home span.path-line-vertical {
+    position: absolute;
+    top: 46px;
+    left: 21px;
+    width: 1px;
+    height: 119px;
+    border-right: 1px dashed gray;
+}
+
+.post-home span.path-line-end {
+    position: absolute;
+    top: 164px;
+    left: 17px;
+    width: 11px;
+    height: 1px;
+    border-bottom: 1px solid gray;
 }
 
 a:visited {
