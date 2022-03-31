@@ -16,12 +16,15 @@ const IndexPage = ({ data }) => {
               <span className='path-line-end' /> :
               null
             }
-            <h2>
-              <Link to={`/blog/${node.slug}`}>
-                {node.frontmatter.title}
-              </Link>
-            </h2>
-            <p className='meta'>{node.frontmatter.date}</p>
+            <header>
+              <h3>
+                <Link to={`/blog/${node.slug}`}>
+                  {node.frontmatter.title}
+                </Link>
+              </h3>
+            <small>{node.frontmatter.date}</small>
+            </header>
+            <p>{node.frontmatter.spoiler}</p>
           </article>
         ))
       }
@@ -36,6 +39,7 @@ export const query = graphql`
         frontmatter {
           date(formatString: "MMMM D, YYYY")
           title
+          spoiler
         }
         id
         slug

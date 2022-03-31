@@ -2,6 +2,9 @@ html {
     font: 100%/1.75 'Merriweather','Georgia',serif;
     box-sizing: border-box;
     overflow-y: scroll;
+    --text: #666;
+    --link: #0A72EF;
+    --border: #eaeaea;
 }
 
 body {
@@ -24,8 +27,14 @@ p {
 }
 
 a {
-    color: #000;
+    color: var(--link) !important;
+    transition-duration: .2s;
+    transition-property: color;
     text-decoration: none;
+}
+
+a:hover {
+    color: #000 !important;
 }
 
 .title {
@@ -57,6 +66,10 @@ a {
 	transform: translate3d(0, 0, 0);
 }
 
+aside > .title > a {
+    color: #000 !important;
+}
+
 aside a h1 {
     font-family: "Inter";
     font-weight: 600;
@@ -73,12 +86,13 @@ aside {
     bottom: 0;
     left: 0;
     width: 300px;
-    border-right: solid 1px #ececec;
+    border-right: solid 1px var(--border);
     margin-top: 30px;
     margin-bottom: 30px;
 }
 
 aside .about {
+    color: var(--text);
     font-size: 0.9rem;
     margin: 20px;
     margin: 20px;
@@ -97,7 +111,7 @@ main {
 
 .img-profile {
     border-radius: 50%;
-    border: solid 1px #ececec;
+    border: solid 1px var(--border);
     width: 150px !important;
     margin: auto !important;
     display: block !important;
@@ -107,7 +121,7 @@ article {
     margin-top: 30px;
 }
 
-article caption {
+article figcaption {
     margin: 1em 0 0;
     font-size: 80%;
     line-height: 1.6em;
@@ -155,48 +169,64 @@ article a:hover {
     position: relative;
     padding: 0;
     height: 100px;
+    margin-left: 5%;
+    color: var(--text);
 }
 
-.post-home h2 {
+.post-home header h3 {
     margin: 0;
     position: absolute;
-    top: 20px;
+    top: 5px;
     left: 40px;
+    font-weight: 600;
 }
 
-.post-home p.meta {
+.post-home header h3 a {
+    color: #000 !important;
+}
+
+.post-home header small {
     margin: 0;
     position: absolute;
-    top: 60px;
+    top: 33px;
+    left: 40px;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.post-home p {
+    margin: 0;
+    position: absolute;
+    top: 55px;
     left: 40px;
 }
 
 .post-home span.path-circle {
     position: absolute;
-    top: 35px;
+    top: 16px;
     left: 17px;
     width: 11px;
     height: 11px;
-    box-shadow: 0 0 0 1.5px gray inset;
+    box-shadow: 0 0 0 1.5px var(--text) inset;
     border-radius: 50%;
 }
 
 .post-home span.path-line-vertical {
     position: absolute;
-    top: 46px;
+    top: 27px;
     left: 21px;
     width: 1px;
     height: 119px;
-    border-right: 1px dashed gray;
+    border-right: 1px dashed var(--text);
 }
 
 .post-home span.path-line-end {
     position: absolute;
-    top: 164px;
+    top: 145px;
     left: 17px;
     width: 11px;
     height: 1px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--text);
 }
 
 a:visited {

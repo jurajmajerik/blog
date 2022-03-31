@@ -16,7 +16,7 @@ const BlogPost = ({ data }) => {
           image={image}
           alt={data.mdx.frontmatter.hero_image_alt}
         />
-        <caption>{data.mdx.frontmatter.hero_image_alt}</caption>
+        <figcaption>{data.mdx.frontmatter.hero_image_alt}</figcaption>
         <MDXRenderer>
           {data.mdx.body}
         </MDXRenderer>
