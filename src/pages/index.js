@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Link, graphql } from 'gatsby'
-import Layout from '../components/layout'
+import Layout from './../layout'
 
 
 const IndexPage = ({ data }) => {
@@ -8,12 +8,11 @@ const IndexPage = ({ data }) => {
     <Layout>
       {
         data.allMdx.nodes.map((node, index) => (
-          <article className='post post-home' key={node.id}>
+          <article className='post-home' key={node.id}>
             <span className='path-circle' />
-            <span className='path-line-vertical' />
             {
-              index === data.allMdx.nodes.length - 1 ?
-              <span className='path-line-end' /> :
+              index !== data.allMdx.nodes.length - 1 ?
+              <span className='path-line-vertical' /> :
               null
             }
             <header>

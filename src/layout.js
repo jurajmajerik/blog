@@ -3,7 +3,7 @@ import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
 import '@fontsource/merriweather'
 import '@fontsource/inter'
-import './layout.css'
+import './layout.scss'
 
 const Layout = ({ pageTitle, children }) => {
 
@@ -22,11 +22,8 @@ const Layout = ({ pageTitle, children }) => {
         />
         <div className="about">
           <p>
-            I'm Juraj, a software engineer living in Amsterdam. I'm interested
-            in distributed systems and finding solutions to real-world problems.
-          </p>
-          <p>
-            Currently building an Uber clone and documenting my journey.
+            I'm Juraj, a software engineer from Amsterdam. I'm interested
+            in distributed systems and finding technical solutions to real-world problems.
           </p>
           <p>
             Follow me on&nbsp;
