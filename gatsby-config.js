@@ -1,7 +1,12 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
-    title: "Juraj Majerik",
+    title: 'Juraj Majerik',
+    author: 'Juraj Majerik',
+    description: 'Personal blog of Juraj Majerik. I write about distributed systems',
+    siteUrl: 'https://jurajmajerik.com',
+    social: {
+      twitter: '@JurajMajerik',
+    },
   },
   plugins: [
     {
@@ -27,5 +32,18 @@ module.exports = {
     },
     "gatsby-plugin-mdx",
     "gatsby-transformer-sharp",
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          {
+            resolve: 'gatsby-remark-prismjs',
+            options: {
+              inlineCodeMarker: '÷',
+            },
+          },
+        ],
+      },
+    }
   ],
 };

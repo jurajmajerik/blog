@@ -17,7 +17,7 @@ const Layout = ({ pageTitle, children }) => {
         </div>
         <StaticImage
           className="img-profile"
-          src="../images/bio.jpg"
+          src="./bio.jpg"
           alt="Profile photo"
         />
         <div className="about">

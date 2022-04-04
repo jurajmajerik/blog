@@ -40,7 +40,7 @@ a {
 }
 
 a:hover {
-    color: #000 !important;
+    color: #000;
 }
 
 aside {
@@ -62,7 +62,7 @@ aside {
         margin-bottom: 50px;
 
         & > a {
-            color: #000 !important;
+            color: #000;
 
             &::after {
                 content: '';
@@ -208,11 +208,6 @@ article.post {
     width: 85%;
     margin: auto;
     padding-bottom: 40px;
-}
-
-a:visited {
-    color: #000;
-    text-decoration: none;
 }
 
 .posts {
