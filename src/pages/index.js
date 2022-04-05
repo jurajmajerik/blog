@@ -7,17 +7,17 @@ const IndexPage = ({ data }) => {
   return (
     <Layout>
       {
-        data.allMdx.nodes.map((node, index) => (
+        data.allMarkdownRemark.nodes.map((node, index) => (
           <article className='post-home' key={node.id}>
             <span className='path-circle' />
             {
-              index !== data.allMdx.nodes.length - 1 ?
+              index !== data.allMarkdownRemark.nodes.length - 1 ?
               <span className='path-line-vertical' /> :
               null
             }
             <header>
               <h3>
-                <Link to={`/blog/${node.slug}`}>
+                <Link to={`blog/${node.frontmatter.slug}`}>
                   {node.frontmatter.title}
                 </Link>
               </h3>
@@ -32,19 +32,19 @@ const IndexPage = ({ data }) => {
 }
 
 export const query = graphql`
-  query {
-    allMdx(sort: {fields: frontmatter___date, order: DESC}) {
-      nodes {
-        frontmatter {
-          date(formatString: "MMMM D, YYYY")
-          title
-          spoiler
-        }
-        id
+query {
+  allMarkdownRemark(sort: {fields: frontmatter___date, order: DESC}) {
+    nodes {
+      frontmatter {
         slug
+        date(formatString: "MMMM D, YYYY")
+        title
+        spoiler
       }
+      id
     }
   }
+}
 `
 
 export default IndexPage

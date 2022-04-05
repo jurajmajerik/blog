@@ -27,9 +27,9 @@ const Layout = ({ pageTitle, children }) => {
           </p>
           <p>
             Follow me on&nbsp;
-            <Link to="https://twitter.com/JurajMajerik" target="_blank">
+            <a href="https://twitter.com/JurajMajerik" target="_blank" rel="noreferrer">
               Twitter
-            </Link>
+            </a>
           </p>
         </div>
       </aside>
