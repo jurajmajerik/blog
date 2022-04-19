@@ -176,6 +176,13 @@ article.post-home {
         }
     }
 
+    & > p {
+        margin: 0;
+        position: absolute;
+        top: 55px;
+        left: 40px;
+    }
+
     & > span.path-circle {
         position: absolute;
         top: 11px;
@@ -193,13 +200,6 @@ article.post-home {
         width: 1px;
         height: 119px;
         border-right: 1px dashed var(--text);
-    }
-
-    & > p {
-        margin: 0;
-        position: absolute;
-        top: 55px;
-        left: 40px;
     }
 }
 

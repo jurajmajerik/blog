@@ -3,7 +3,7 @@ import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
 import '@fontsource/merriweather'
 import '@fontsource/inter'
-import './layout.scss'
+import './index.scss'
 
 const Layout = ({ pageTitle, children }) => {
 
