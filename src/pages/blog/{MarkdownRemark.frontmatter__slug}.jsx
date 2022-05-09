@@ -1,19 +1,20 @@
-import * as React from 'react'
-import { graphql } from 'gatsby'
-import { GatsbyImage, getImage } from 'gatsby-plugin-image'
-import Layout from '../../layout'
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import { graphql } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import Layout from '../../layout';
 
 const BlogPost = ({ data }) => {
-  const { markdownRemark } = data // data.markdownRemark holds your post data
-  const { frontmatter, html } = markdownRemark
+  const { markdownRemark } = data;
+  const { frontmatter, html } = markdownRemark;
 
-  const image = getImage(frontmatter.hero_image)
+  const image = getImage(frontmatter.hero_image);
 
   return (
     <Layout pageTitle={data.markdownRemark.frontmatter.title}>
-      <article className='post'>
+      <article className="post">
         <h1 className="heading">{frontmatter.title}</h1>
-        <p className='meta'>{frontmatter.date}</p>
+        <p className="meta">{frontmatter.date}</p>
         <GatsbyImage
           image={image}
           alt={frontmatter.hero_image_alt}
@@ -25,8 +26,8 @@ const BlogPost = ({ data }) => {
         />
       </article>
     </Layout>
-  )
-}
+  );
+};
 
 export const query = graphql`
 query($id: String!) {
@@ -39,6 +40,10 @@ query($id: String!) {
     }
   }
 }
-`
+`;
 
-export default BlogPost
+BlogPost.propTypes = {
+  data: PropTypes.any,
+};
+
+export default BlogPost;
