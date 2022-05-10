@@ -1,8 +1,8 @@
 ---
 slug: "introduction-uber-clone"
-title: "Setting up a server"
-date: "2022-03-29"
-spoiler: "We can't do much without one"
+title: "Building an Uber Clone: Introduction"
+date: "2022-03-28"
+spoiler: "Why am I doing this?"
 ---
 Uber app has been fascinating to me for some time. It touches the physical world, it keeps this machinery of cars and people moving, it needs to be fast, reliable. The architecture is huge an real-time.
  

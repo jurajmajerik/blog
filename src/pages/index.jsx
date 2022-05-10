@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Link, graphql } from 'gatsby';
@@ -49,8 +51,8 @@ IndexPage.propTypes = {
   data: PropTypes.any,
 };
 
-// IndexPage.defaultProps = {
-//   data: PropTypes.any,
-// };
+IndexPage.defaultProps = {
+  data: PropTypes.any,
+};
 
 export default IndexPage;

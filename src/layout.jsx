@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
@@ -21,7 +23,7 @@ const Layout = ({ children }) => (
       />
       <div className="about">
         <p>
-          I'm Juraj, a software engineer from Amsterdam. I&aposm interested
+          I&#39;m Juraj, a software engineer from Amsterdam. I&#39;m interested
           in distributed systems and finding technical solutions to real-world problems.
         </p>
         <p>
@@ -39,11 +41,11 @@ const Layout = ({ children }) => (
 );
 
 Layout.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.any,
 };
 
 Layout.defaultProps = {
-  children: PropTypes.element,
+  children: PropTypes.any,
 };
 
 export default Layout;

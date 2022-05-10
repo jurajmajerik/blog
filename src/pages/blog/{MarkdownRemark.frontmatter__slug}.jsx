@@ -1,25 +1,24 @@
+/* eslint-disable react/forbid-prop-types, react/no-danger, camelcase */
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import Layout from '../../layout';
 
 const BlogPost = ({ data }) => {
   const { markdownRemark } = data;
   const { frontmatter, html } = markdownRemark;
-
-  const image = getImage(frontmatter.hero_image);
-
+  const {
+    title,
+    date,
+    hero_image_alt,
+  } = frontmatter;
   return (
-    <Layout pageTitle={data.markdownRemark.frontmatter.title}>
+    <Layout pageTitle={title}>
       <article className="post">
         <h1 className="heading">{frontmatter.title}</h1>
-        <p className="meta">{frontmatter.date}</p>
-        <GatsbyImage
-          image={image}
-          alt={frontmatter.hero_image_alt}
-        />
-        <figcaption>{frontmatter.hero_image_alt}</figcaption>
+        <p className="meta">{date}</p>
+        <figcaption>{hero_image_alt}</figcaption>
         <div
           className="blog-post-content"
           dangerouslySetInnerHTML={{ __html: html }}
@@ -43,6 +42,10 @@ query($id: String!) {
 `;
 
 BlogPost.propTypes = {
+  data: PropTypes.any,
+};
+
+BlogPost.defaultProps = {
   data: PropTypes.any,
 };
 
