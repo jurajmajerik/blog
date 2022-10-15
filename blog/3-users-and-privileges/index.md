@@ -1,0 +1,52 @@
+---
+slug: "users-and-privileges"
+title: "#3 Users & privileges"
+date: "2022-10-16"
+spoiler: "Acting as the root is risky"
+---
+The __root__ user is an admin account - it is allowed to change any files in the system. Performing daily tasks as the root is therefore risky. A simple mistake while typing a command can have unintended consequences.
+
+It is a good practice to create a regular user account. A regular user (i.e. not a root) is only allowed to modify the files they have created. The regular user can still access the superuser "powers" when needed, but he has to do so explicitly. This is done by prefixing a command with ```sudo```. The user needs to be a so called __sudoer__ to be able to use the sudo command.
+
+We need a create a new sudo user on our server.
+
+The user id of such a user must be included in the sudoers file.
+
+First, let's add a new user __*juraj*__. We will be prompted to create a new password and some user's details. We can skip the irrelevant ones by pressing Enter.
+```
+root@server:~# sudo adduser juraj
+Adding user `juraj' ...
+Adding new group `juraj' (1000) ...
+Adding new user `juraj' (1000) with group `juraj' ...
+Creating home directory `/home/juraj' ...
+Copying files from `/etc/skel' ...
+New password: 
+Retype new password: 
+passwd: password updated successfully
+Changing the user information for juraj
+Enter the new value, or press ENTER for the default
+        Full Name []: Juraj Majerik
+        Room Number []: 
+        Work Phone []: 
+        Home Phone []: 
+        Other []: 
+Is the information correct? [Y/n] Y
+```
+
+Next, we need to add the new user to the __*sudo*__ group. This command does that by updating the ```/etc/sudoers``` files with the id of the user.
+```
+root@server:~# sudo adduser juraj sudo
+Adding user `juraj' to group `sudo' ...
+Adding user juraj to group sudo
+Done.
+```
+
+Finally, we can check if the user contains the sudo group. We can see that the sudo groups (id=27) is indeed present.
+```
+root@server:~# id juraj
+uid=1000(juraj) gid=1000(juraj) groups=1000(juraj),27(sudo)
+```
+
+Now I can login as __*juraj*__:
+
+```ssh juraj@api.jurajmajerik.com```
