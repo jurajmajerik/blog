@@ -12,7 +12,7 @@ We need a create a new sudo user on our server.
 
 The user id of such a user must be included in the sudoers file.
 
-First, let's add a new user __*juraj*__. We will be prompted to create a new password and some user's details. We can skip the irrelevant ones by pressing Enter.
+First, let's add a new user ```juraj```. We will be prompted to create a new password and some user's details. We can skip the irrelevant ones by pressing Enter.
 ```
 root@server:~# sudo adduser juraj
 Adding user `juraj' ...
@@ -33,7 +33,7 @@ Enter the new value, or press ENTER for the default
 Is the information correct? [Y/n] Y
 ```
 
-Next, we need to add the new user to the __*sudo*__ group. This command does that by updating the ```/etc/sudoers``` files with the id of the user.
+Next, we need to add the new user to the ```sudo``` group. This command does that by updating the ```/etc/sudoers``` files with the id of the user.
 ```
 root@server:~# sudo adduser juraj sudo
 Adding user `juraj' to group `sudo' ...
@@ -41,12 +41,14 @@ Adding user juraj to group sudo
 Done.
 ```
 
-Finally, we can check if the user contains the sudo group. We can see that the sudo groups (id=27) is indeed present.
+Finally, we can check if the user contains the sudo group. We can see that the sudo group (id=27) is indeed present.
 ```
 root@server:~# id juraj
 uid=1000(juraj) gid=1000(juraj) groups=1000(juraj),27(sudo)
 ```
 
-Now I can login as __*juraj*__:
+Now I can login as ```juraj```:
 
-```ssh juraj@api.jurajmajerik.com```
+```
+ssh juraj@api.jurajmajerik.com
+```

@@ -10,4 +10,9 @@ This involves generating the SSH keys, and copying them over to the ```.ssh``` f
 
 Once I'm finished, the authentication happens behind the scenes via SSH keys and I'm no longer being asked for the password.
 
-![Server from bash](./img-1.png)
+```
+➜  ~ ssh juraj@api.jurajmajerik.com
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-110-generic x86_64)
+...
+juraj@server:~$ 
+```

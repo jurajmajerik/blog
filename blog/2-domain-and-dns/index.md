@@ -4,7 +4,7 @@ title: "#2 Domain & DNS"
 date: "2022-10-15"
 spoiler: "Use a domain instead of IP"
 ---
-Let's connect a domain to our server. This will save us from having to use type the IP address when logging in, but also when calling our server's APIs in the future.
+Let's connect a domain to our server. This will save us from having to type the IP address when logging in, but also when calling our server's APIs in the future.
 
 I already own the domain __jurajmajerik.com__. I'm just going to add the ```api.``` prefix before it and assign it to the server IP.
 
@@ -14,6 +14,9 @@ My domain is managed by GoDaddy. In their interface, I added a new [A record](ht
 
 By doing this, we are updating the [Domain Name System (DNS)](https://aws.amazon.com/route53/what-is-dns/#:~:text=DNS%2C%20or%20the%20Domain%20Name,2.44) with a new mapping (domain -> IP address). The changes take a few hours to propagate to all DNS servers. Once that happens, I can log in to my server like so:
 
-```ssh root@api.jurajmajerik.com```
-
-![Bash command](./domain-2.png)
+```
+➜  ~ ssh root@api.jurajmajerik.com
+root@api.jurajmajerik.com's password: 
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-110-generic x86_64)
+...
+```

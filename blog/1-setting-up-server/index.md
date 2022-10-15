@@ -10,8 +10,15 @@ Today I've set up a server on Digital Ocean. I went for the cheapest option with
 
 The important part is the IPv4 address. I can access my server at this address, via the __*ssh*__ command. Out of the box, the Ubuntu server on the Digital Ocean only has the __*root*__ user. I need to prefix the user name before the address bit.
 
-```ssh root@178.62.242.234```
+```
+ssh root@178.62.242.234
+```
 
 Once I type in the password, I'm inside my server.
 
-![Server from bash](./server-2.png)
+```
+➜  ~ ssh root@178.62.242.234
+root@178.62.242.234's password: 
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-110-generic x86_64)
+...
+```
