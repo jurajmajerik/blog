@@ -8,7 +8,7 @@ Today I've set up a server on Digital Ocean. I went for the cheapest option with
 
 ![Digital Ocean server](./server-1.png)
 
-The important part is the IPv4 address. I can access my server at this address, via the __*ssh*__ command. Out of the box, the Ubuntu server on the Digital Ocean only has the __*root*__ user. I need to prefix the user name before the address bit.
+The important part is the IPv4 address. I can access my server at this address, via the ```ssh``` command. Out of the box, the Ubuntu server on the Digital Ocean only has the ```root``` user. I need to prefix the user name before the address bit.
 
 ```
 ssh root@178.62.242.234
