@@ -24,7 +24,7 @@ const Layout = ({ children }) => (
       <div className="about">
         <p>
           I&#39;m Juraj, a software engineer from Amsterdam. I&#39;m interested
-          in distributed systems and finding technical solutions to real-world problems.
+          in distributed systems.
         </p>
         <p>
           Follow me on&nbsp;

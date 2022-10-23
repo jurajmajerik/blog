@@ -1,0 +1,78 @@
+---
+slug: "first-deployment"
+title: "#7 First deployment"
+date: "2022-10-21"
+spoiler: "Poor man's deployment, that is"
+---
+Let's copy our ```server``` folder to our server at ```api.jurajmajerik.com```. We can do this with the ```scp command```. Add the ```-r``` option to recursively copy the entire directory.
+
+```
+scp -r server juraj@api.jurajmajerik.com:~
+```
+
+When we log in to our server, we can see the folder has been copied successfully.
+```
+juraj@server:~$ ls
+server
+```
+
+There is on issue in our server code. It currently starts at server 8080, which is a local port. You cannot connect to this port from the outside. So if we want to expose our server to the world - i.e. allow anyone to make HTTP requests to it, we need to start the server at port ```80```.
+
+So while still on our server, let's change open the server code in an editor ...
+```
+nano server/main.go
+```
+
+... change the port from ```8080``` to ```80``` and save the file.
+```
+...
+http.ListenAndServe(":80", nil)
+...
+```
+
+Then ```cd``` to ```server``` and start it with ```go run main.go```. The server, however fails to start. That's because for security reasons, ports below ```1024``` require root privileges. Therefore, we need to run the server with ```sudo```.
+
+```sudo``` command has its own ```$PATH```, which is defined in the sudo config. To add ```go``` to that path, do the following:
+
+Open the sudo config file
+```
+sudo visudo
+```
+Find the line starting with ```Defaults    secure_path```
+
+Add the following to the end of the line:
+```
+:/usr/local/go/bin
+```
+
+Start the server:
+```
+sudo go run main.go
+```
+
+Now the world can make requests to our server!
+
+![HTTP request](./img-1.png)
+
+As soon as we log out, the program is also stopped. To solve this, we need to run the command in the background. This is done by adding the ```&``` character after the command.
+```
+juraj@server:~/server$ sudo go run main.go &
+[1] 2200302
+```
+
+What we get back is the process ID (PID): ```2200302```. With a ```ps -e``` command, we can show all running processes in the system.
+```
+...
+2200302 pts/1    00:00:00 sudo
+2200303 pts/1    00:00:00 go
+2200330 pts/1    00:00:00 main
+...
+```
+For a reason I don't yet understand, our command seems to have started three processes: ```sudo```, ```go``` and ```main```. I'll update this section once I have the explanation for this.
+
+We can stop a running process with a ```kill <PID>```. To stop our server, we need to target the ```main``` process:
+```
+juraj@server:~/server$ sudo kill 2200330
+signal: terminated
+[1]+  Exit 1                  sudo go run main.go
+```
