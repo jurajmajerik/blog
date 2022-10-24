@@ -33,4 +33,4 @@ scp -r server juraj@api.jurajmajerik.com:~
 
 Start the server with ```sudo go run main.go``` and head to the browser. If we go to ```https://api.jurajmajerik.com/data```, we can see the server is now serving our data securely.
 
-![HTTP request](./img-1.png)
+![HTTP request](./img-2.png)
