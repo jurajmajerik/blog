@@ -44,4 +44,4 @@ func main() {
 }
 ```
 
-We can now test our code. Run it locally, then deploy with ```scp``` and test on the production server. Both endpoints should now return ```Hello world```.
+We can now test our code. Run it locally, then deploy with ```scp``` and test on the production server. Both local and production endpoint should now return ```Hello world```.
