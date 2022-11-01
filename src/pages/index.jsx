@@ -8,25 +8,21 @@ import Layout from '../layout';
 const IndexPage = ({ data }) => (
   <Layout>
     {
-      data.allMarkdownRemark.nodes.map((node, index) => (
-        <article className="post-home" key={node.id}>
-          <span className="path-circle" />
-          {
-            index !== data.allMarkdownRemark.nodes.length - 1
-              ? <span className="path-line-vertical" />
-              : null
-          }
-          <header>
-            <h3>
-              <Link to={`blog/${node.frontmatter.slug}`}>
-                {node.frontmatter.title}
-              </Link>
-            </h3>
-            <small>{node.frontmatter.date}</small>
-          </header>
-          <p>{node.frontmatter.spoiler}</p>
-        </article>
-      ))
+      data.allMarkdownRemark.nodes.map((node, index) => {
+        if (node.frontmatter.hidden) return null;
+
+        return (
+          <Link key={node.id} to={`blog/${node.frontmatter.slug}`}>
+            <article className="post-home">
+              <div>
+                <h3>{node.frontmatter.title}</h3>
+                <small>{node.frontmatter.date}</small>
+                <p>{node.frontmatter.spoiler}</p>
+              </div>
+            </article>
+          </Link>
+        );
+      })
     }
   </Layout>
 );
@@ -40,6 +36,7 @@ query {
         date(formatString: "MMMM D, YYYY")
         title
         spoiler
+        hidden
       }
       id
     }

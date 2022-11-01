@@ -3,6 +3,7 @@ slug: "environment-variables"
 title: "#10 Serving a web page"
 date: "2022-10-27"
 spoiler: ""
+hidden: "true"
 ---
 Change the server domain from api.jurajmajerik.com to app.jurajmajerik.com.
 Serve frontend and API from the same domain. Later maybe split.
