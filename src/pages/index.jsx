@@ -7,23 +7,23 @@ import Layout from '../layout';
 
 const IndexPage = ({ data }) => (
   <Layout>
-    {
-      data.allMarkdownRemark.nodes.map((node, index) => {
-        if (node.frontmatter.hidden) return null;
+    <div className="home-grid">
+      {
+        data.allMarkdownRemark.nodes.map((node, index) => {
+          if (node.frontmatter.hidden) return null;
 
-        return (
-          <Link key={node.id} to={`blog/${node.frontmatter.slug}`}>
-            <article className="post-home">
-              <div>
+          return (
+            <Link key={node.id} to={`blog/${node.frontmatter.slug}`}>
+              <article className="post-home">
                 <h3>{node.frontmatter.title}</h3>
                 <small>{node.frontmatter.date}</small>
                 <p>{node.frontmatter.spoiler}</p>
-              </div>
-            </article>
-          </Link>
-        );
-      })
-    }
+              </article>
+            </Link>
+          );
+        })
+      }
+    </div>
   </Layout>
 );
 

@@ -1,6 +1,6 @@
 ---
 slug: "golang-installation"
-title: "#5 Installing Golang"
+title: "#5 Installing Go"
 date: "2022-10-17 18:00"
 spoiler: "Our language of choice"
 ---

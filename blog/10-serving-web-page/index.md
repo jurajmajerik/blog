@@ -1,5 +1,5 @@
 ---
-slug: "environment-variables"
+slug: "serving-web-page"
 title: "#10 Serving a web page"
 date: "2022-10-27"
 spoiler: ""

@@ -6,6 +6,7 @@ import { Link } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 import '@fontsource/merriweather';
 import '@fontsource/inter';
+import '@fontsource/ibm-plex-sans';
 import './index.scss';
 
 const Layout = ({ children }) => (
@@ -23,8 +24,8 @@ const Layout = ({ children }) => (
       />
       <div className="about">
         <p>
-          I&#39;m Juraj, a software engineer from Amsterdam. I&#39;m interested
-          in distributed systems.
+          I&#39;m Juraj, a software engineer from Amsterdam.
+          I learn about distributed systems by building cool stuff.
         </p>
         <p>
           Follow me on&nbsp;
