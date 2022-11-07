@@ -1,0 +1,121 @@
+---
+slug: "improving-deployment"
+title: "#11 Improving deployment"
+date: "2022-11-07"
+spoiler: "Deploy & monitor with a single command"
+hidden: ""
+---
+The current deployment process needs some work. First, we currently copy all our code manually via ```scp```. There's a better way to do this. We can actually initialize a Git repository directly on the server and pull our code from GitHub. This will give us the ability to immediately roll back to the previous version if we experience issues in production. Second, we now have to manually stop the server and then start it again for our deploy to take effect.
+
+Wouldn't it be great if we could do all of this with a single command? Not only that - can we actually *monitor* a running deployment from our local machine? That's what we're gonna be looking at today.
+
+To start fresh, remove the ```app``` directory in our production server.
+```
+rm -rf app
+```
+
+Ensure Git is installed. If it isn't, follow these [steps](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). Then clone the repository.
+```
+git clone git@github.com:jurajmajerik/server.git
+```
+
+*The following section might be controversial. To achieve a single-command deploy, we want to avoid typing ```sudo``` every time we start or stop a command that requires this. Here, I'll show the way to disable the password prompt. Opinions vary on whether this is a good idea from the security point of view. I'm not an expert, but we obviously want to avoid typing the password during our deploys. So at this point, I'm just gonna go ahead and turn off the prompt. If I learn more about this topic and find a safer way to do this, I will update this section.*
+
+Open the sudoers file with ```sudo visudo``` and add the following line at the end. ```juraj``` is the name of my user account for which I want to disable the password prompt.
+```
+juraj ALL=(ALL) NOPASSWD: ALL
+```
+
+Then reboot the server for changes to take effect.
+```
+sudo reboot
+```
+
+One more thing before we start with the deploy script. So far, we have been running the server code with ```go run <module_name>```. This command first compiles the Go program into binary on the fly, and then runs it. I am now going to introduce a build step that will compile and save the binary during the deploy. At the end of this step, we will have a binary which we can run directly. In our situation, this has two main advantages - restarting the server will be faster (should we need to) and process management (e.g. killing the process) is more straightforward. Read more about this
+[topic](https://stackoverflow.com/questions/61060768/why-is-it-recommended-to-use-go-build-instead-of-go-run-when-running-a-go-ap).
+
+During the deploy, we will be compiling our code with the ```go build``` command. Before that, we need to initialize our ```app``` module. In the home directory of our production server, run:
+```
+go mod init app
+```
+
+This creates the ```go.mod``` file that tells Go which version of the language the module is using.
+
+Let's now transition back to our local machine where we're gonna write our bash scripts that will handle the deployment. I'm going to create two files in the ```app``` directory.
+
+```prod_deploy.sh``` will run on the production server and handle the actual deploy. Here's the full script:
+```
+#!/bin/bash
+SECONDS=0
+
+cd $HOME/app
+
+msg () {
+  echo -e "$1\n--------------------\n"
+}
+
+msg "Stopping app"
+sudo pkill app
+
+msg "Pulling from GitHub"
+git pull
+
+msg "Building Go binary"
+go build
+
+msg "Starting server"
+nohup sudo ./app &>/dev/null &
+
+duration=$SECONDS
+
+echo
+msg "Deploy finished in $(($duration % 60)) seconds."
+msg "Press Enter to exit"
+read
+```
+
+The script first stops the running server, pulls fresh code from our GitHub repository, compiles our server code into a binary, starts the process with and shows a summary. I'm using a simple function for easier formatting of messages. I'm also tracking the time of the deploy using the special ```$SECONDS``` variable in bash. In the end, I output the success message and prompt a user for input with a read command (more on that in a second).
+
+Normally, a program terminates after the user logs out. This is why I'm starting the process with the ```nohup``` command. ```nohup``` ensures the program will keep running even after we log out. It does so by preventing the signal messages reaching the program. By default, ```nohup``` write output to ```nohup.out```. To prevent cluttering our server directory, we redirect the output to ```/dev/null```. We also add the ```&``` at the end to run the process in the background.
+
+Finally, we add ```deploy.sh``` script that  will run on our local machine. It will kick off the ```prod_deploy.sh``` script and monitor its progress from our local terminal.
+
+```
+#!/bin/bash
+sshcmd="ssh -t juraj@app.jurajmajerik.com"
+$sshcmd screen -S "deployment" /home/juraj/app/prod_deploy.sh
+```
+The script logs into our server with ```ssh```. It then kick off a new screen and give it the name "deployment".
+We are using the ```screen``` command to monitor the deploy on our production server. ```screen``` starts a new terminal session and persists it on our production server. We can pull up an existing screen at any point. If our connection breaks down and we get logged out, we can simply log back in and pull up the "deployment" screen. This allows us to check on our deploy if our connection gets interrupted.
+
+Once the deployment finishes, the program would normally terminate. At that point, we would lose any useful info about the finished deploy. This is why we've added the ```read``` line at the end of the script. This command simply wait for any input from the user. The screen will terminate once we press Enter.
+
+Once we're done, we simply need to run ```chmod +x <filename>``` on both deploy scripts to make them executable. Then we can push our changes to GitHub. Before our first deploy, we need to log into our server and manually pull the changes - the server doesn't have the deploy script yet! Afterwards, all we ever have to do is to run ```deploy.sh``` on our local machine:
+```
+./deploy.sh
+```
+And we can monitor the progress our deployment live!
+
+```
+Stopping app
+--------------------
+
+Pulling from GitHub
+--------------------
+
+Already up to date.
+Building Go binary
+--------------------
+
+/home/juraj/app/prod_deploy.sh: line 17: go: command not found
+Starting server
+--------------------
+
+
+Deploy finished in 2 seconds.
+--------------------
+
+Press Enter to exit
+--------------------
+```
+*n.b. I don't know the reason for the ```/home/juraj/app/prod_deploy.sh: line 17: go: command not found``` message. I'll update the above section once I find out.*

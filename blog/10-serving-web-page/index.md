@@ -1,7 +1,7 @@
 ---
 slug: "serving-web-page"
 title: "#10 Serving a web page"
-date: "2022-10-27"
+date: "2022-11-03"
 spoiler: "Getting our app frontend"
 hidden: ""
 ---
