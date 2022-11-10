@@ -10,7 +10,7 @@ A handler function takes ```http.ResponseWriter``` and ```http.Request``` argume
 
 We write the response from the handler using the ```fmt.Fprintf``` method. This method takes as its first parameter an instance of ```http.ResponseWriter```. The second argument is the response itself.
 
-```
+```go
 func getData(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "Hello world\n")
 }
@@ -18,12 +18,12 @@ func getData(w http.ResponseWriter, req *http.Request) {
 
 We register our handler by calling ```http.HandleFunc()``` method, passing the path and the handler itself.
 
-```
+```go
 http.HandleFunc("/data", headers)
 ```
 
 Finally, we define a port to listen to:
-```
+```go
 http.ListenAndServe(":8080", nil)
 ```
 
@@ -42,7 +42,7 @@ Hello world
 ```
 
 Here's the complete code of our server:
-```
+```go
 package main
 
 import (

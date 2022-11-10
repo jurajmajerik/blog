@@ -17,7 +17,7 @@ Certbot has set up a scheduled task to automatically renew this certificate in t
 ```
 
 Let's now revisit our server code stored on our local machine. We need to switch to the ```ListenAndServeTLS()``` method. We need to pass it the port number (433 for HTTPS), and the location of the certification file and the private key file.
-```
+```go
 http.ListenAndServeTLS(
   ":443",
   "/etc/letsencrypt/live/api.jurajmajerik.com/fullchain.pem",

@@ -24,7 +24,7 @@ nano server/main.go
 ```
 
 ... change the port from ```8080``` to ```80``` and save the file.
-```
+```go
 ...
 http.ListenAndServe(":80", nil)
 ...

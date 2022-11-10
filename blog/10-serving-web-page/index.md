@@ -5,7 +5,7 @@ date: "2022-11-03"
 spoiler: "Getting our app frontend"
 hidden: ""
 ---
-*From this post onwards, every post will have its own branch in the Github repository. See the code for this post on the [serving-web-page](https://github.com/jurajmajerik/server/tree/serving-web-page) branch.*
+*From now on, every post will have its own branch in the Github repository. See the code for this post on the [serving-web-page](https://github.com/jurajmajerik/server/tree/serving-web-page) branch.*
 
 Today I've set up the serving of my app's frontend. First, I changed the domain of the server from ```api.jurajmajerik.com``` to ```app.jurajmajerik.com```. At this point, it's okay to serve both the frontend and the APIs from the same server. With this setup, the ```app``` domain name is more fitting. I might separate them out later.
 
@@ -23,7 +23,7 @@ Next, I set up a ```static``` folder in my ```server``` directory. Here, I place
 
 The code to serve frontend files is a simple one-liner added to the main function. At the ```/``` path, let's serve all of the files in the ```static``` folder:
 
-```
+```go
 http.Handle("/", http.FileServer(http.Dir("./static")))
 ```
 
@@ -32,3 +32,5 @@ I first ran ```main.go``` locally and checked if the file was served at ```local
 ![Serving web page](./img-3.png)
 
 Our app frontend is now being served at [https://app.jurajmajerik.com](https://app.jurajmajerik.com)!
+
+*See the code for this post on the [serving-web-page](https://github.com/jurajmajerik/server/tree/serving-web-page) branch.*

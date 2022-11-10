@@ -1,10 +1,12 @@
 ---
-slug: "improving-deployment"
-title: "#11 Improving deployment"
+slug: "improving-deploys"
+title: "#11 Improving deploys"
 date: "2022-11-07"
 spoiler: "Deploy & monitor with a single command"
 hidden: ""
 ---
+*See the code for this post on the [improving-deploys](https://github.com/jurajmajerik/server/tree/improving-deploys) branch.*
+
 The current deployment process needs some work. First, we currently copy all our code manually via ```scp```. There's a better way to do this. We can actually initialize a Git repository directly on the server and pull our code from GitHub. This will give us the ability to immediately roll back to the previous version if we experience issues in production. Second, we now have to manually stop the server and then start it again for our deploy to take effect.
 
 Wouldn't it be great if we could do all of this with a single command? Not only that - can we actually *monitor* a running deployment from our local machine? That's what we're gonna be looking at today.
@@ -44,7 +46,7 @@ This creates the ```go.mod``` file that tells Go which version of the language t
 Let's now transition back to our local machine where we're gonna write our bash scripts that will handle the deployment. I'm going to create two files in the ```app``` directory.
 
 ```prod_deploy.sh``` will run on the production server and handle the actual deploy. Here's the full script:
-```
+```bash
 #!/bin/bash
 SECONDS=0
 
@@ -80,7 +82,7 @@ Normally, a program terminates after the user logs out. This is why I'm starting
 
 Finally, we add ```deploy.sh``` script that  will run on our local machine. It will kick off the ```prod_deploy.sh``` script and monitor its progress from our local terminal.
 
-```
+```bash
 #!/bin/bash
 sshcmd="ssh -t juraj@app.jurajmajerik.com"
 $sshcmd screen -S "deployment" /home/juraj/app/prod_deploy.sh
@@ -91,7 +93,7 @@ We are using the ```screen``` command to monitor the deploy on our production se
 Once the deployment finishes, the program would normally terminate. At that point, we would lose any useful info about the finished deploy. This is why we've added the ```read``` line at the end of the script. This command simply wait for any input from the user. The screen will terminate once we press Enter.
 
 Once we're done, we simply need to run ```chmod +x <filename>``` on both deploy scripts to make them executable. Then we can push our changes to GitHub. Before our first deploy, we need to log into our server and manually pull the changes - the server doesn't have the deploy script yet! Afterwards, all we ever have to do is to run ```deploy.sh``` on our local machine:
-```
+```bash
 ./deploy.sh
 ```
 And we can monitor the progress our deployment live!
@@ -119,3 +121,5 @@ Press Enter to exit
 --------------------
 ```
 *n.b. I don't know the reason for the ```/home/juraj/app/prod_deploy.sh: line 17: go: command not found``` message. I'll update the above section once I find out.*
+
+*See the code for this post on the [improving-deploys](https://github.com/jurajmajerik/server/tree/improving-deploys) branch.*

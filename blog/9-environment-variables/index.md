@@ -25,7 +25,7 @@ We need to log out and back in for our changes to take effect. But before that, 
 
 The adjusted ```main()``` function is below.
 
-```
+```go
 func main() {
 	http.HandleFunc("/data", getData);
 
