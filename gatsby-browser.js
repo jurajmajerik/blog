@@ -1,1 +1,2 @@
-require('prismjs/themes/prism-solarizedlight.css');
+import './src/global.css';
+import 'prismjs/themes/prism-solarizedlight.css';

@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.prose p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: #52525b;
+}

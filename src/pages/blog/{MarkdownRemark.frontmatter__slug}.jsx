@@ -15,12 +15,12 @@ const BlogPost = ({ data }) => {
   } = frontmatter;
   return (
     <Layout pageTitle={title}>
-      <article className="post">
-        <h1 className="heading">{frontmatter.title}</h1>
-        <p className="meta">{date}</p>
+      <article className="">
+        <p className="text-base text-zinc-400 dark:text-zinc-500">{date}</p>
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">{frontmatter.title}</h1>
         <figcaption>{hero_image_alt}</figcaption>
         <div
-          className="blog-post-content"
+          className="mt-8 prose dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </article>
