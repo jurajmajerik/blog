@@ -36,7 +36,7 @@ const Layout = ({ children }) => (
               <a href="https://github.com/jurajmajerik" target="_blank" rel="noreferrer">
                 <i className="fa-brands fa-github text-xl ml-2" />
               </a>
-              <a href="https://github.com/jurajmajerik" target="_blank" rel="noreferrer">
+              <a href="https://www.linkedin.com/in/jurajmajerik/" target="_blank" rel="noreferrer">
                 <i className="fa-brands fa-linkedin text-xl ml-2" />
               </a>
             </p>
