@@ -15,6 +15,7 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "@fontsource/fira-code": "^4.5.12",
     "@fontsource/ibm-plex-sans": "^4.5.13",
     "@fontsource/inter": "^4.5.7",
     "@fontsource/merriweather": "^4.5.8",
