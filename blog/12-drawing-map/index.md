@@ -105,6 +105,6 @@ const drawHelper = (() => {
 })();
 ```
 This is the final result. Sure, it's not a high fidelity map, but it will suffice for now. Eventually, I want to plot the app on an actual city map, such as one from OpenStreetMap.
-![City map](./img-2.png)
+![City map](./img-3.png)
 
 *See the full code for this post on the [draw-map](https://github.com/jurajmajerik/server/tree/draw-map) branch.*
