@@ -26,18 +26,20 @@ const Layout = ({ children }) => (
           />
           <div className="mt-6 space-y-7 text-sm text-zinc-600 dark:text-zinc-400">
             <p>
-              I&#39;m Juraj, a software engineer living in Amsterdam.
-              I explore distributed systems by building cool stuff.
+              I&#39;m Juraj, a software engineer based in Amsterdam.
+              I learn about distributed systems the
+              <Link className="text-sky-700 hover:text-sky-800" to="/blog/start-here"> hard way</Link>
+              .
             </p>
             <p className="mt-6">
               <a href="https://twitter.com/JurajMajerik" target="_blank" rel="noreferrer">
-                <i className="fa-brands fa-twitter text-xl" />
+                <i className="hover:text-zinc-700 fa-brands fa-twitter text-xl" />
               </a>
               <a href="https://github.com/jurajmajerik" target="_blank" rel="noreferrer">
-                <i className="fa-brands fa-github text-xl ml-2" />
+                <i className="hover:text-zinc-700 fa-brands fa-github text-xl ml-2" />
               </a>
               <a href="https://www.linkedin.com/in/jurajmajerik/" target="_blank" rel="noreferrer">
-                <i className="fa-brands fa-linkedin text-xl ml-2" />
+                <i className="hover:text-zinc-700 fa-brands fa-linkedin text-xl ml-2" />
               </a>
             </p>
           </div>
