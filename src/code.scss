@@ -3,9 +3,9 @@ pre[class*="language-"] {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background: #32325d;
+  background: #272743;
   color: #e6ebf1;
-  font-family: Fira Code, monospace;
+  font-family: Menlo;
   font-size: 0.85rem;
   text-align: left;
   white-space: pre;
@@ -65,7 +65,7 @@ pre[class*="language-"] {
 .token.boolean,
 .token.number,
 .token.function {
-  color: #f08d49;
+  color: #e59c87;
 }
 
 .token.property,
@@ -97,7 +97,7 @@ pre[class*="language-"] {
 
 .token.important,
 .token.bold {
-  font-weight: bold;
+  // font-weight: bold;
 }
 .token.italic {
   font-style: italic;
@@ -114,17 +114,17 @@ pre[class*="language-"] {
 .token.function,
 .token.constant,
 .token.boolean {
-  color: #45b2e8;
+  color: #5cb8e5;
 }
 
 .token.keyword,
 .token.operator {
-  color: #7795f8;
+  color: #8fa7f7;
 }
 
 .token.function,
 .token.keyword {
-  font-weight: 600;
+  // font-weight: 600;
 }
 
 /* Text Selection colour */
@@ -142,6 +142,8 @@ pre[class*='language-'] ::selection {
 
 /* Inline code */
 :not(pre) > code[class*='language-'] {
+  // font-weight: bold;
+  font-size: 0.9rem;
   border-radius: 0.3em;
   background: rgba(255, 229, 100, 0.2);
   color: #1a1a1a;

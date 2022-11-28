@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Menlo';
+  src: url(/fonts/Menlo-Regular.woff) format("woff");
+}
+
 .prose p {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -16,4 +21,10 @@
 
 .prose a:hover {
   color: rgb(3 105 161);
+}
+
+.prose ul {
+  color: #52525b;
+  list-style-type: disc;
+  list-style-position: inside;
 }

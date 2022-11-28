@@ -1,15 +1,17 @@
 ---
 slug: "start-here"
-title: "Start here"
+title: "Building an Uber clone"
 date: "2022-10-13"
 spoiler: "What's my plan?"
 hidden: ""
 ---
 My goal is to build a clone of the Uber app. I am fascinated by distributed systems; this is my way to explore and learn about them properly.
 
+![app frontend](./img-1.png)
+
 There are several components I envision for the app. For a start, a single server can host all of these. We might add more machines if the complexity or the increased load requires it.
 
-## Storage layer
+## Storage
 We need to persist data on drivers, customers, rides, and locations. The database must support a high throughput of writes as every driving car continuously updates its geolocation.
 
 ## APIs
@@ -20,3 +22,5 @@ The simulation engine is the beating heart of the app. All traffic (pun intended
 
 ## Frontend
 There will be a frontend app that will display the city map. You'll see active routes and cars moving along them in real-time. There will be system monitors to observe the load on various components.
+
+![system diagram](./img-2.png)
