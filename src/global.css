@@ -28,3 +28,9 @@
   list-style-type: disc;
   list-style-position: inside;
 }
+
+.prose iframe {
+  margin: auto;
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+}

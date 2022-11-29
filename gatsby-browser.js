@@ -1,3 +1,3 @@
+import './assets/css/all.min.css';
 import './src/global.css';
-import 'prismjs/themes/prism-solarizedlight.css';
-import '@fontsource/fira-code';
+import './src/code.css';

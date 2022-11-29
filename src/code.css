@@ -3,7 +3,7 @@ pre[class*="language-"] {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background: #272743;
+  background: #1f1f36;
   color: #e6ebf1;
   font-family: Menlo;
   font-size: 0.85rem;
@@ -22,7 +22,6 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-
 }
 
 /* Code blocks */
@@ -96,9 +95,6 @@ pre[class*="language-"] {
 }
 
 .token.important,
-.token.bold {
-  // font-weight: bold;
-}
 .token.italic {
   font-style: italic;
 }
@@ -123,9 +119,6 @@ pre[class*="language-"] {
 }
 
 .token.function,
-.token.keyword {
-  // font-weight: 600;
-}
 
 /* Text Selection colour */
 pre[class*='language-']::-moz-selection,
@@ -141,8 +134,7 @@ pre[class*='language-'] ::selection {
 }
 
 /* Inline code */
-:not(pre) > code[class*='language-'] {
-  // font-weight: bold;
+:not(pre) > code {
   font-size: 0.9rem;
   border-radius: 0.3em;
   background: rgba(255, 229, 100, 0.2);

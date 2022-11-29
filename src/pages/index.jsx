@@ -1,7 +1,4 @@
-/* eslint-disable react/forbid-prop-types */
-
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { Link, graphql } from 'gatsby';
 import Layout from '../layout';
 
@@ -9,7 +6,7 @@ const IndexPage = ({ data }) => (
   <Layout>
     <div className="inline-grid w-full 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
       {
-        data.allMarkdownRemark.nodes.map((node, index) => {
+        data.allMdx.nodes.map((node) => {
           if (node.frontmatter.hidden) return null;
 
           return (
@@ -33,8 +30,9 @@ const IndexPage = ({ data }) => (
 
 export const query = graphql`
 query {
-  allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
+  allMdx(sort: {frontmatter: {date: DESC}}) {
     nodes {
+      id
       frontmatter {
         slug
         date(formatString: "MMMM D, YYYY")
@@ -42,18 +40,12 @@ query {
         spoiler
         hidden
       }
-      id
+      internal {
+        contentFilePath
+      }
     }
   }
 }
 `;
-
-IndexPage.propTypes = {
-  data: PropTypes.any,
-};
-
-IndexPage.defaultProps = {
-  data: PropTypes.any,
-};
 
 export default IndexPage;
