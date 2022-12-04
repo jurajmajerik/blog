@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  height: 100%;
+  background-color: #111827;
+}
+
 @font-face {
   font-family: 'Menlo';
   src: url(/fonts/Menlo-Regular.woff) format("woff");
@@ -33,4 +39,14 @@
   margin: auto;
   margin-top: 30px !important;
   margin-bottom: 30px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose p {
+    color: #cbd5e0;
+  }
+
+  .prose li {
+    color: #a0aec0;
+  }
 }

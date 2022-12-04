@@ -11,7 +11,7 @@ const IndexPage = ({ data }) => (
 
           return (
             <Link key={node.id} to={`blog/${node.frontmatter.slug}`}>
-              <article className="h-125 transition-all hover:drop-shadow-sm m-2 p-4 bg-white rounded-md border border-slate-200 hover:border-slate-300">
+              <article className="h-125 transition-all hover:drop-shadow-sm m-2 p-4 bg-white dark:bg-gray-800 rounded-md border border-slate-200 hover:border-slate-300">
                 <h3 className="text-base font-medium tracking-normal text-zinc-800 dark:text-zinc-100">
                   {node.frontmatter.title}
                 </h3>

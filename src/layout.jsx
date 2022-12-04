@@ -16,7 +16,7 @@ const Layout = ({ children }) => (
           <div className="sticky top-0 p-4 w-full text-center">
             <div className="">
               <Link to="/">
-                <h1 className="text-2xl">Juraj Majerik</h1>
+                <h1 className="text-2xl dark:text-white">Juraj Majerik</h1>
               </Link>
             </div>
             <StaticImage
