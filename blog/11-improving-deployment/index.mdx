@@ -3,11 +3,10 @@ slug: "improving-deploys"
 title: "#11 Improving deploys"
 date: "2022-11-07"
 spoiler: "Deploy & monitor with a single command"
+branch: "improving-deploys"
 hidden: ""
 ---
-*See the code for this post on the [improving-deploys](https://github.com/jurajmajerik/server/tree/improving-deploys) branch.*
-
-The current deployment process needs some work. First, we currently copy all our code manually via ```scp```. There's a better way to do this. We can actually initialize a Git repository directly on the server and pull our code from GitHub. This will give us the ability to immediately roll back to the previous version if we experience issues in production. Second, we now have to manually stop the server and then start it again for our deploy to take effect.
+The current deployment setup needs some work. First, we currently copy all our code manually via ```scp```. There's a better way to do this. We can actually initialize a Git repository directly on the server and pull our code from GitHub. This will give us the ability to immediately roll back to the previous version if we experience issues in production. Second, we now have to manually stop the server and then start it again for our deploy to take effect.
 
 Wouldn't it be great if we could do all of this with a single command? Not only that - can we actually *monitor* a running deployment from our local machine? That's what we're gonna be looking at today.
 
@@ -121,5 +120,3 @@ Press Enter to exit
 --------------------
 ```
 *n.b. I don't know the reason for the ```/home/juraj/app/prod_deploy.sh: line 17: go: command not found``` message. I'll update the above section once I find out.*
-
-*See the code for this post on the [improving-deploys](https://github.com/jurajmajerik/server/tree/improving-deploys) branch.*

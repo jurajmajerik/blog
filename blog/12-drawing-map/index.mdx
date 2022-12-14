@@ -3,10 +3,9 @@ slug: "draw-map"
 title: "#12 Drawing a map"
 date: "2022-11-08"
 spoiler: "We built this city"
+branch: "draw-map"
 hidden: ""
 ---
-*See the code for this post on the [draw-map](https://github.com/jurajmajerik/server/tree/draw-map) branch.*
-
 Today I drew an SVG map that will display all the action, such as routes requested, riders waiting and cars moving.
 
 I used plain JavaScript to draw the map. It has a square shape and inside, there are 50 squares in each direction = 2500 squares in total. Points are represented by a set of coordinates starting from ```[0, 0]``` up to ```[49, 49]```.
@@ -110,5 +109,3 @@ const drawHelper = (() => {
 This is the final result. Sure, it's not a high fidelity map, but it will do for now. Eventually, I want to plot the app on an actual city map, such as one from OpenStreetMap.
 
 ![City map](./img-3.png)
-
-*See the full code for this post on the [draw-map](https://github.com/jurajmajerik/server/tree/draw-map) branch.*

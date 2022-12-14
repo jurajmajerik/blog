@@ -3,10 +3,9 @@ slug: "build-graph"
 title: "#13 Building a graph"
 date: "2022-12-02"
 spoiler: "Where do you go?"
+branch: "build-graph"
 hidden: ""
 ---
-*See the code for this post on the [build-graph](https://github.com/jurajmajerik/server/tree/build-graph) branch.*
-
 We need a data structure allowing us to _move_ from point A to point B. This data structure is called a _graph_.
 
 Suppose we have a point on the road at coordinates ```12, 40```. Let's call this point a node. From this node, we want to be able to move to its adjacent road nodes. So every node in our data structure must include pointers to those.
@@ -47,5 +46,3 @@ The video shows how the build algorithm traverses the points in the network. I'v
 `youtube: https://www.youtube.com/watch?v=us8GmDnwwn8`
 
 The final product is the ```nodes``` hash table. It stores every node in our road network. If we now pick any coordinate on the map, we can explore its neighbors and get to any other point in the network.
-
-*See the code for this post on the [build-graph](https://github.com/jurajmajerik/server/tree/build-graph) branch.*

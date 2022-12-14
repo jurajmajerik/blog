@@ -2,23 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #111827;
-  }
-
-  .prose p {
-    color: #cbd5e0;
-  }
-
-  .prose li {
-    color: #a0aec0;
-  }
-}
-
 @font-face {
   font-family: 'Menlo';
   src: url(/fonts/Menlo-Regular.woff) format("woff");
+}
+
+p.excerpt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .prose p {
@@ -29,7 +23,7 @@
 
 .prose a {
   color: rgb(2 132 199);
-  font-weight: 600;
+  font-weight: 500;
   font-style: normal;
 }
 
@@ -47,4 +41,18 @@
   margin: auto;
   margin-top: 30px !important;
   margin-bottom: 30px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #111827;
+  }
+
+  .prose p {
+    color: #cbd5e1;
+  }
+
+  .prose li {
+    color: #a0aec0;
+  }
 }
