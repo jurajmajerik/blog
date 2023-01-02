@@ -5,7 +5,7 @@ date: "2022-12-23"
 branch: "docker-setup"
 hidden: ""
 ---
-Today I was about to install an SQL database. It occurred to me that I would have to *again* do this separately for my local MacOS machine and the Ubuntu production server. This workflow is not ideal. Over time, we will introduce many more components to our app. Setting them up manually across different machines and environments would quickly prove unmanageable.
+Today I was going to install an SQL database. It occurred to me that I would have to *again* do this separately for my local MacOS machine and the Ubuntu production server. This workflow is not ideal. Over time, we will introduce many more components to our app. Setting them up manually across different machines and environments would quickly prove unmanageable.
 
 It's time to introduce Docker. We will use Docker to package our application into containers. A container is an isolated environment that includes all code, libraries and dependencies it needs to run. This container can then be deployed on any machine that has Docker installed, and will always run in the same environment, regardless of the underlying operating system or hardware.
 
