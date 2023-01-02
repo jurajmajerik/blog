@@ -27,8 +27,8 @@ const Layout = ({ children }) => (
             <div className="mt-6 space-y-7 text-sm text-zinc-600 dark:text-zinc-400">
               <p>
                 I&#39;m Juraj, a software engineer based in Amsterdam.
-                I learn about distributed systems the
-                <Link className="text-sky-700 hover:text-sky-800" to="/blog/start-here"> hard way</Link>
+                I learn about distributed systems
+                <Link className="text-blue-500 hover:text-blue-600" to="/blog/start-here"> the hard way</Link>
                 .
               </p>
               <p className="mt-6">

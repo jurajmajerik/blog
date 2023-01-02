@@ -22,13 +22,13 @@ p.excerpt {
 }
 
 .prose a {
-  color: rgb(2 132 199);
+  color: #3b82f6;
   font-weight: 500;
   font-style: normal;
 }
 
 .prose a:hover {
-  color: rgb(3 105 161);
+  color: #2563eb;
 }
 
 .prose ul {

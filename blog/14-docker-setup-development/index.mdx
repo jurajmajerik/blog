@@ -1,0 +1,75 @@
+---
+slug: "docker-setup"
+title: "#15 Setting up Docker"
+date: "2022-12-23"
+branch: "docker-setup"
+hidden: ""
+---
+Today I was about to install an SQL database. It occurred to me that I would have to *again* do this separately for my local MacOS machine and the Ubuntu production server. This workflow is not ideal. Over time, we will introduce many more components to our app. Setting them up manually across different machines and environments would quickly prove unmanageable.
+
+It's time to introduce Docker. We will use Docker to package our application into containers. A container is an isolated environment that includes all code, libraries and dependencies it needs to run. This container can then be deployed on any machine that has Docker installed, and will always run in the same environment, regardless of the underlying operating system or hardware.
+
+![Docker containers](./img-1.png)
+
+Today we'll start by containerizing the web server itself. The first step is to [install Docker Desktop](https://www.docker.com/products/docker-desktop/) on the local MacOS. Docker Desktop is a full installation of Docker that also includes a nice GUI for inspecting and working with containers.
+
+An image is built from a *Dockerfile*. A *Dockerfile* includes all instructions necessary to build the image - including the underlying operating system, installation of programming language, any required dependencies, and the commands needed to start the app. Here's what my *Dockerfile* looks like:
+
+```
+FROM golang:1.18-alpine
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY *.go ./
+COPY static ./static
+
+RUN go build -o /app
+
+CMD [ "/app" ]
+```
+
+Here are the step-by-step instructions for building our image, as specified in our ```Dockerfile```:
+- Download and install Alpine, a fast, lightweight, secure distribution of Linux. This base image already includes an installation of Go 1.18.
+- Set the working directory of the app. Note that here we are referring to the private filesystem inside the container. We can now refer to our ```/app``` folder with the ```.``` directive.
+- Copy the files from ```/app``` to the container root directory. This includes all ```.go``` files, ```go.mod``` and the static files served for our frontend app.
+- Build the binary.
+- Run the binary to start our web server.
+
+We can now run the Docker ```build``` command to build our image. The first build takes a bit longer since Docker needs to download the base image. Subsequent builds are much faster.
+```
+docker build --tag app .
+```
+
+The ```.``` directive here refers to what Docker terms *context* - a set of files that Docker has access to while building the image. This includes the *Dockerfile* with instructions and any app files that need to be copied into the container.
+
+Once we've built a Docker image, we can run it as a container. Here we include the following flags:
+- ```-d``` runs the container in the detached mode, so the app will keep running even when the terminal is disconnected.
+- ```--expose``` exposes port 8080 of the container.
+- ```p``` binds an exposed container's port to the host machine's port. If we didn't do this, our app would not be accessible at localhost:8080. That's the level of isolation Docker provides by default.
+- ```-e``` passes the environment variable required by our web server.
+
+```
+docker run \
+-d \
+--name app \
+--expose 8080 \
+-p 8080:8080 \
+-e SERVER_ENV=DEV \
+app
+```
+
+We can now go to the browser and see if the app is being served at [http://localhost:8080](http://localhost:8080).
+
+We can preview existing containers with the following command:
+```
+docker image ls
+```
+
+Finally, we can stop and remove a container like so:
+```
+sudo docker stop app
+sudo docker rm app
+```
+
+In the next post, we will deploy a Docker container to our production server.

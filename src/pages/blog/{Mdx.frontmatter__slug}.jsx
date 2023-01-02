@@ -5,7 +5,7 @@ import Layout from '../../layout';
 const BranchNote = ({ branch }) => (
   <div className="mt-4 text-zinc-600 dark:text-slate-300">
     <span className="italic">See the code for this post on the </span>
-    <a className="font-medium text-sky-700 hover:text-sky-800" href={`https://github.com/jurajmajerik/server/tree/${branch}`} target="_blank" rel="noreferrer">
+    <a className="font-medium text-blue-500 hover:text-blue-600" href={`https://github.com/jurajmajerik/server/tree/${branch}`} target="_blank" rel="noreferrer">
       <i className="hover:text-zinc-700 fa-solid fa-code-branch text-sm ml-1 mr-1" />
       {branch}
     </a>

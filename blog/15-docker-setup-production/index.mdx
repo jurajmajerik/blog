@@ -1,0 +1,54 @@
+---
+slug: "docker-setup-production"
+title: "#16 Docker: production"
+date: "2022-12-24"
+branch: "docker-setup-production"
+hidden: "true"
+---
+Let's test now implement Docker on our production server. Before we deploy our changes, we need to install Docker on our production server. Here, we'll only install [Docker Engine](https://docs.docker.com/engine/) instead of Docker Desktop, as we don't need the GUI.
+
+All commands in production need to be prefixed with ```sudo```.
+
+The build command has the following adjustments
+- use port ```443``` for HTTPS
+- Our production container doesn't have access to the SSL certificate! We need to pass it a reference to the folder on our host file system that stores our SSL certificates. Docker calls these references volumes, hence the -v flag.
+
+```
+sudo docker run \
+-d \
+--name app \
+--expose 443 \
+-p 443:443 \
+-v /etc/letsencrypt:/etc/letsencrypt \
+-e SERVER_ENV=PROD \
+app
+```
+
+Finally, we need to adjust our deploy script. It will now pull from Github, build a Docker image, stop the currently running container, start a container from the fresh image, and prune the old image.
+
+```
+msg "Pulling from GitHub"
+git pull
+
+msg "Building Docker image"
+sudo docker build --tag app .
+
+msg "Stopping Docker container"
+sudo docker stop app
+sudo docker rm app
+
+msg "Starting Docker container"
+sudo docker run \
+-d \
+--name app \
+--expose 443 \
+-p 443:443 \
+-v /etc/letsencrypt:/etc/letsencrypt \
+-e SERVER_ENV=PROD \
+app
+
+msg "Pruning stale Docker images"
+sudo docker image prune -f
+```
+
+We have just deployed our first container! We now have a nicely isolated web server application that we can deploy both locally and in production. At first, our changes don't seem to have achieved much - we still have a simple app that we are deploying with a single command. But this setup will start paying big dividends once the complexity of our app increases. In the next post, we will set up a container with SQL database.
