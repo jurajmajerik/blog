@@ -46,7 +46,7 @@ The ```.``` directive here refers to what Docker terms *context* - a set of file
 Once we've built a Docker image, we can run it as a container. Here we include the following flags:
 - ```-d``` runs the container in the detached mode, so the app will keep running even when the terminal is disconnected.
 - ```--expose``` exposes port 8080 of the container.
-- ```p``` binds an exposed container's port to the host machine's port. If we didn't do this, our app would not be accessible at localhost:8080. That's the level of isolation Docker provides by default.
+- ```p``` binds an exposed container's port to the host machine's port. If we didn't do this, our app would not be accessible at ```localhost:8080```. That's the level of isolation Docker provides by default.
 - ```-e``` passes the environment variable required by our web server.
 
 ```
