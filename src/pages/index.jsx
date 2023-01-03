@@ -4,7 +4,7 @@ import Layout from '../layout';
 
 const IndexPage = ({ data }) => (
   <Layout>
-    <div className="inline-grid w-full 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+    <div className="inline-grid w-full 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
       {
         data.allMdx.nodes.map((node) => {
           if (node.frontmatter.hidden) return null;
@@ -50,7 +50,7 @@ query {
   allMdx(sort: {frontmatter: {date: DESC}}) {
     nodes {
       id
-      excerpt(pruneLength: 50)
+      excerpt(pruneLength: 80)
       frontmatter {
         slug
         date(formatString: "MMMM D, YYYY")

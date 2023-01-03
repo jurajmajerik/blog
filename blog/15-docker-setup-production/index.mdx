@@ -1,17 +1,14 @@
 ---
 slug: "docker-setup-production"
-title: "#16 Docker: production"
+title: "#16 Docker in production"
 date: "2022-12-24"
 branch: "docker-setup-production"
-hidden: "true"
 ---
-Let's test now implement Docker on our production server. Before we deploy our changes, we need to install Docker on our production server. Here, we'll only install [Docker Engine](https://docs.docker.com/engine/) instead of Docker Desktop, as we don't need the GUI.
+Let's test now use Docker in production. Before we deploy our changes, we need to install Docker on our production server. Here, we'll only install [Docker Engine](https://docs.docker.com/engine/) instead of *Docker Desktop*, as we don't need the GUI.
 
-All commands in production need to be prefixed with ```sudo```.
-
-The build command has the following adjustments
-- use port ```443``` for HTTPS
-- Our production container doesn't have access to the SSL certificate! We need to pass it a reference to the folder on our host file system that stores our SSL certificates. Docker calls these references volumes, hence the -v flag.
+All commands in production need to be prefixed with ```sudo```. The ```build``` command has the following adjustments:
+- Use port ```443``` for HTTPS.
+- Our production container doesn't have access to the SSL certificate! We need to pass it a reference to the folder on our host file system that stores our SSL certificates. Docker calls these references *volumes*, hence the ```-v``` flag.
 
 ```
 sudo docker run \
@@ -51,4 +48,4 @@ msg "Pruning stale Docker images"
 sudo docker image prune -f
 ```
 
-We have just deployed our first container! We now have a nicely isolated web server application that we can deploy both locally and in production. At first, our changes don't seem to have achieved much - we still have a simple app that we are deploying with a single command. But this setup will start paying big dividends once the complexity of our app increases. In the next post, we will set up a container with SQL database.
+We have just deployed our first container! We now have a nicely isolated web server application that we can deploy locally and in production. At first glance, our changes have not achieved much - we still have a simple app we deploy with a single command. But this setup will start paying big dividends once the complexity of our app increases. In the next post, we will set up a container with SQL database.
