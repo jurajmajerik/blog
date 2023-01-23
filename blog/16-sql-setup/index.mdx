@@ -3,9 +3,10 @@ slug: "sql-setup"
 title: "#17 SQL setup"
 date: "2023-01-03"
 branch: "sql-setup"
-hidden: "true"
 ---
-Start a Postgres 15.1 container. We don't need a build step via a Dockerfile, everything is taken care of via the base image. By default, Postgres listens on port 5432. We are exposing this port and mapping it to the same port on our machine. We are also passing a password, which is required.
+We will use PostgreSQL as our database for persisting data on drivers, riders, and trips. Postgres is open-source, can handle large amounts of reads and writes, and supports transactions. It has a long track record and a strong community behind it. In the past, Uber has also used Postgres as its primary data store.
+
+Thanks to Docker, setting up Postgres is a breeze. We don't need a build step via a Dockerfile, as everything is taken care of via the base image. To start a Docker container, run the following:
 ```
 docker run -d \
 --name db-postgres \
@@ -14,10 +15,28 @@ docker run -d \
 -e POSTGRES_PASSWORD=mysecretpassword \
 postgres:15.1-alpine
 ```
+By default, Postgres listens on port ```5432```. We are exposing this port and mapping it to the same port on our machine. We are also passing a password, which is required.
 
-Now copy the same command to the ```prod_deploy.sh``` script and we are done. It's really that simple.
+You might have also noticed we're mounting the ```/var/lib/postgresql/data``` to the host machine. This is where Postgres stores data by default. By mounting this directory, we are persisting our data on the host machine, so that they will be saved across container restarts.
 
-Start an interactive terminal session in a running container:
+If you want to see where Docker stores mounted volumes on the host machine, use the ```docker volume inspect``` command:
+```
+docker volume inspect app-db
+...
+{
+  ...
+   "Mountpoint": "/var/lib/docker/volumes/app-db/_data",
+   ...
+}
+```
+
+To start a Postgres container on our production server, all we have to do is copy the same command to the ```prod_deploy.sh``` script, prefixing the ```docker run``` command with ```sudo```. It's really that simple.
+```
+sudo docker run -d \
+...
+```
+
+Let's now try a quick interaction with the database to ensure everything is working correctly. First, start an interactive terminal session in the running container:
 ```
 docker exec -it db-postgres bash
 ```
@@ -27,27 +46,22 @@ Connect to the PostgreSQL server as the ```postgres``` user:
 psql -U postgres
 ```
 
-Default folder where Postgres stores data is:
-/var/lib/postgresql/data
-
-We need to mount this directory to the host machine. Any change to this directory made from the container should be made to the directory on the host machine. This way the data will be persisted across container restarts.
+You can list all databases with the ```\l``` command:
 ```
-docker volume inspect app-db
-```
-
-```
-{
-  ...
-   "Mountpoint": "/var/lib/docker/volumes/app-db/_data",
-   ...
-}
+postgres=# \l
+                                                List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    | ICU Locale | Locale Provider |   Access privileges   
+-----------+----------+----------+------------+------------+------------+-----------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            | =c/postgres          +
+           |          |          |            |            |            |                 | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            | =c/postgres          +
+           |          |          |            |            |            |                 | postgres=CTc/postgres
+(3 rows)
 ```
 
-List databases: ```\l```
-List tables in the current database: ```\dt```
-
+Let's add a ```drivers``` table.
 ```
-Add a table:
 CREATE TABLE Drivers (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -58,7 +72,7 @@ CREATE TABLE Drivers (
 );
 ```
 
-Add records to the table:
+Add some records to the table:
 ```
 INSERT INTO drivers (name, phone, email, password, license_number) VALUES(
   'Alice',
@@ -75,13 +89,22 @@ INSERT INTO drivers (name, phone, email, password, license_number) VALUES(
   'BB-CC-45'
 );
 ```
+You can list the tables within the currently selected database with ```\dt```:
+```
+postgres=# \dt
+          List of relations
+ Schema |  Name   | Type  |  Owner   
+--------+---------+-------+----------
+ public | drivers | table | postgres
+(1 row)
+```
 
-Query the table:
+Finally, query the table:
 ```
-SELECT * FROM drivers;
-```
-
-Drop table:
-```
-DROP TABLE drivers2;
+postgres=# SELECT * FROM drivers;
+ id |  name   |    phone     |        email        | password | license_number 
+----+---------+--------------+---------------------+----------+----------------
+  1 | Alice   | +31612345678 | alice@example.com   | b7Fkd9Lm | XX-ZZ-23
+  2 | Michael | +31687654321 | michael@example.com | a5Sgf8Wx | BB-CC-45
+(2 rows)
 ```
