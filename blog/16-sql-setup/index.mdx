@@ -5,3 +5,83 @@ date: "2023-01-03"
 branch: "sql-setup"
 hidden: "true"
 ---
+Start a Postgres 15.1 container. We don't need a build step via a Dockerfile, everything is taken care of via the base image. By default, Postgres listens on port 5432. We are exposing this port and mapping it to the same port on our machine. We are also passing a password, which is required.
+```
+docker run -d \
+--name db-postgres \
+-p 5432:5432 \
+--mount type=volume,src=app-db,target=/var/lib/postgresql/data \
+-e POSTGRES_PASSWORD=mysecretpassword \
+postgres:15.1-alpine
+```
+
+Now copy the same command to the ```prod_deploy.sh``` script and we are done. It's really that simple.
+
+Start an interactive terminal session in a running container:
+```
+docker exec -it db-postgres bash
+```
+
+Connect to the PostgreSQL server as the ```postgres``` user:
+```
+psql -U postgres
+```
+
+Default folder where Postgres stores data is:
+/var/lib/postgresql/data
+
+We need to mount this directory to the host machine. Any change to this directory made from the container should be made to the directory on the host machine. This way the data will be persisted across container restarts.
+```
+docker volume inspect app-db
+```
+
+```
+{
+  ...
+   "Mountpoint": "/var/lib/docker/volumes/app-db/_data",
+   ...
+}
+```
+
+List databases: ```\l```
+List tables in the current database: ```\dt```
+
+```
+Add a table:
+CREATE TABLE Drivers (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  license_number VARCHAR(255) NOT NULL
+);
+```
+
+Add records to the table:
+```
+INSERT INTO drivers (name, phone, email, password, license_number) VALUES(
+  'Alice',
+  '+31612345678',
+  'alice@example.com',
+  'b7Fkd9Lm',
+  'XX-ZZ-23'
+);
+INSERT INTO drivers (name, phone, email, password, license_number) VALUES(
+  'Michael',
+  '+31687654321',
+  'michael@example.com',
+  'a5Sgf8Wx',
+  'BB-CC-45'
+);
+```
+
+Query the table:
+```
+SELECT * FROM drivers;
+```
+
+Drop table:
+```
+DROP TABLE drivers2;
+```

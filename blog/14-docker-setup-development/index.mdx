@@ -3,17 +3,18 @@ slug: "docker-setup"
 title: "#15 Setting up Docker"
 date: "2022-12-23"
 branch: "docker-setup"
-hidden: ""
 ---
 Today I was going to install an SQL database. It occurred to me that I would have to *again* do this separately for my local MacOS machine and the Ubuntu production server. This workflow is not ideal. Over time, we will introduce many more components to our app. Setting them up manually across different machines and environments would quickly prove unmanageable.
 
-It's time to introduce Docker. We will use Docker to package our application into containers. A container is an isolated environment that includes all code, libraries and dependencies it needs to run. This container can then be deployed on any machine that has Docker installed, and will always run in the same environment, regardless of the underlying operating system or hardware.
+It's time to introduce Docker. We will use Docker to package our application into containers. A container is an isolated environment that includes all code, libraries, and dependencies it needs to run. This container can then be deployed on any machine that has Docker installed, and will always run in the same environment, regardless of the underlying operating system or hardware.
 
 ![Docker containers](./img-1.png)
 
 Today we'll start by containerizing the web server itself. The first step is to [install Docker Desktop](https://www.docker.com/products/docker-desktop/) on the local MacOS. Docker Desktop is a full installation of Docker that also includes a nice GUI for inspecting and working with containers.
 
-An image is built from a *Dockerfile*. A *Dockerfile* includes all instructions necessary to build the image - including the underlying operating system, installation of programming language, any required dependencies, and the commands needed to start the app. Here's what my *Dockerfile* looks like:
+A Docker container runs from an *image*. When we launch a container, we are creating a new runtime environment based on the instructions specified within the image.
+
+An image is specified via a Dockerfile. This file contains all necessary instructions for building the image, including the underlying operating system, programming language, required dependencies, and commands needed to start the application. Here's what our *Dockerfile* looks like:
 
 ```
 FROM golang:1.18-alpine
@@ -30,9 +31,9 @@ CMD [ "/app" ]
 ```
 
 Here are the step-by-step instructions for building our image, as specified in our ```Dockerfile```:
-- Download and install Alpine, a fast, lightweight, secure distribution of Linux. This base image already includes an installation of Go 1.18.
-- Set the working directory of the app. Note that here we are referring to the private filesystem inside the container. We can now refer to our ```/app``` folder with the ```.``` directive.
-- Copy the files from ```/app``` to the container root directory. This includes all ```.go``` files, ```go.mod``` and the static files served for our frontend app.
+- Download and install *Alpine*, a lightweight distribution of Linux. This base image already includes an installation of ```Go 1.18```.
+- Set the working directory of the app. Note that here we are referring to the private filesystem inside the container. From now on, we can refer to our ```/app``` folder with the ```.``` directive.
+- Copy the files from ```/app``` to the container's root directory. This includes all ```.go``` files, ```go.mod``` and the static files served for our frontend app.
 - Build the binary.
 - Run the binary to start our web server.
 
@@ -45,8 +46,8 @@ The ```.``` directive here refers to what Docker terms *context* - a set of file
 
 Once we've built a Docker image, we can run it as a container. Here we include the following flags:
 - ```-d``` runs the container in the detached mode, so the app will keep running even when the terminal is disconnected.
-- ```--expose``` exposes port 8080 of the container.
-- ```p``` binds an exposed container's port to the host machine's port. If we didn't do this, our app would not be accessible at ```localhost:8080```. That's the level of isolation Docker provides by default.
+- ```--expose``` exposes port ```8080``` of the container.
+- ```-p``` binds an exposed container's port to the host machine's port. If we didn't do this, our app would not be accessible at ```localhost:8080```. That's the level of isolation Docker provides by default.
 - ```-e``` passes the environment variable required by our web server.
 
 ```

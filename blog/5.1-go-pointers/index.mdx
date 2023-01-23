@@ -2,9 +2,8 @@
 slug: "go-pointers"
 title: "Go: Pointers"
 date: "2022-10-18"
-spoiler: "Variables, values, pointers"
 ---
-I'm a bit rusty with Go, so before I start coding, I'm gonna do a little refresher on pointers here.
+I'm a bit rusty with Go, so before I start coding, let's do a little refresher on pointers.
 
 First, let's declare variables ```i``` and ```j``` and point them to values ```10``` and ```20``` respectively.
 ![Declare variables](./img-1.png)
@@ -29,13 +28,13 @@ Next, we can update variable ```i``` through pointer ```p``` like so:
 
 And verify with a print. We can see that ```i``` was updated.
 ```
-	fmt.Println(p)
+  fmt.Println(p)
   > 0xc00001c030 // Memory address unchanged as we are still pointing to the same variable
 
-	fmt.Println(i)
+  fmt.Println(i)
   > 15 // i was changed to 15
 
-	fmt.Println(*p)
+  fmt.Println(*p)
   > 15 // i was changed to 15, and p points to i
 ```
 
@@ -50,5 +49,5 @@ fmt.Println(p)
 > 0xc00001c038 // p now has a new memory address
 
 fmt.Println(*p)
-> 20 // p now points to j which points to 20
+> 20 // p now points to j, which points to 20
 ```

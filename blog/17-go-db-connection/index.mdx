@@ -1,0 +1,16 @@
+---
+slug: "go-db-connection"
+title: "#18 Go: database connection"
+date: "2023-01-10"
+branch: "go-db-connection"
+hidden: "true"
+---
+Let's connect our server to our database. First, we're going to add a folder ```database``` where we will keep all of our database-related code. Inside the folder let's create ```db.go``` file which will initialize the connector.
+
+This is a good moment to explain how modules, packages and importing work in Go. Our module is called ```app```. The folder where we'll keep the database code is ```postgres```. The package name for files inside the ```postgres``` folder is ```db```.
+
+When importing a package, the first part is the variable at which the contents of the package are accessible. The first part of the import path is the name of the module. The second part is the folder name within our module.
+
+
+
+Our database is listening on port 5432.

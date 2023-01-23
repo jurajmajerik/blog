@@ -2,15 +2,13 @@
 slug: "draw-map"
 title: "#12 Drawing a map"
 date: "2022-11-08"
-spoiler: "We built this city"
 branch: "draw-map"
-hidden: ""
 ---
-Today I drew an SVG map that will display all the action, such as routes requested, riders waiting and cars moving.
+We need a map that will display all the action, such as routes requested, riders waiting and cars moving.
 
-I used plain JavaScript to draw the map. It has a square shape and inside, there are 50 squares in each direction = 2500 squares in total. Points are represented by a set of coordinates starting from ```[0, 0]``` up to ```[49, 49]```.
+We can use plain JavaScript to draw the map using SVG. The map has a square shape and inside, there are 50 squares in each direction = 2500 squares in total. Points are represented by a set of coordinates starting from ```[0, 0]``` up to ```[49, 49]```.
 
-First, we lay out all the squares inside the map and store each ```rect``` shape in a hash table under its corresponding coordinates.
+First, we lay out all the squares inside the map and store each ```rect``` shape in an object under its corresponding coordinates.
 ```js
 for (let x = 0; x < gridCount; x += 1) {
   for (let y = 0; y < gridCount; y += 1) {
@@ -27,15 +25,15 @@ for (let x = 0; x < gridCount; x += 1) {
 }
 ```
 
-In the map, we need a way to define obstacles. These can be buildings, rivers or parks - anything that a car can't drive on. Everything else is a driveable road.
+In the map, we need a way to define obstacles. These can be buildings, rivers or parks. Everything else is a driveable road.
 
 An obstacle is defined as a rectangular shape. Four values are required to draw an obstacle: ```minX```, ```maxX```, ```minY```, ```maxY```. These lay out the ```x``` and ```y``` coordinates between which an obstacle is placed.
 
 For example, an obstacle defined as ```[36,38,5,10]``` will be a rectangle:
-- 3 points long, starting at ```x=36``` and ending before the ```x=38```
-- 6 points wide, starting at ```y=5``` and ending before the ```y=10```
+- 3 points long, starting at the ```x=36``` and ending before the ```x=38```
+- 6 points wide, starting at the ```y=5``` and ending before the ```y=10```
 
-Any obstacles (e.g. L-shaped buildings, curving river), can be assembled with these rectangles.
+Obstacles of any size and shape can be assembled with these rectangles (e.g. L-shaped buildings, a curving river).
 
 The following method draws the obstacles on the map.
 ```js
@@ -61,9 +59,9 @@ const drawObstacle = (xStart, xEnd, yStart, yEnd, color) => {
   }
 };
 ```
-Here we also set the point in the hash table corresponding to an obstacle to ```false```. This will aid us when building the graph data structure that will model the road network. More on that in the upcoming post.
+An important detail - we are setting the value in the ```points``` object corresponding to an obstacle to ```false```. This will aid us when building the graph data structure that will model the road network. More on that in the upcoming post.
 
-I initially started out by filling out the obstacle coordinates by hand, but that quickly proved cumbersome. Check out the ```obstacles.js``` file - there's quite a few of them! So to speed this up, I added a helper method that records coordinates upon clicking on a map square. After three clicks, this method highlights the area between the extremities and outputs the four values required to the console. Using this method, I was able to populate the map with obstacles fairly quickly.
+I initially started out by filling out the obstacle coordinates by hand, but it was quite time-consuming. Check out the ```obstacles.js``` file - there's quite a few of them! So to speed things up, I added a helper method that records coordinates upon clicking on a map square. After three clicks, this method highlights the area between the extremities and outputs the four bounding values to the console. Using this method, I was able to populate the map with obstacles quite quickly.
 ```js
 const drawHelper = (() => {
   let count = 0;
@@ -106,6 +104,6 @@ const drawHelper = (() => {
 
 `youtube: https://www.youtube.com/watch?v=i85P5N5I7mE`
 
-This is the final result. Sure, it's not a high fidelity map, but it will do for now. Eventually, I want to plot the app on an actual city map, such as one from OpenStreetMap.
+This is the final result. I know, it's not a high fidelity map, but it will suffice for now. Eventually, we might use an actual city map, such as one from OpenStreetMap.
 
 ![City map](./img-3.png)

@@ -2,11 +2,10 @@
 slug: "environment-variables"
 title: "#9 Environment variables"
 date: "2022-10-23"
-spoiler: "We need some context"
 ---
-Let's make our server aware of the environment it is running in. On our local machine, we want to listen on our local port ```8080```. On the production server, we want to use HTTPS and port ```443```.
+Let's make our server aware of its environment. On our local machine, we want to listen on our local port ```8080```. On the production server, we want to use HTTPS and port ```443```.
 
-We need to use environment variables to set this "context". These variables are loaded whenever a shell is started. On MacOS, I added the following line to my ```.zprofile``` script. This is a script that runs whenever ```zshell``` (which is what I use) opens. If you use the regular bash, you want to edit ```.bash_profile```.
+We need to use environment variables to set this context. These variables are loaded whenever a shell is started. On macOS, I added the following line to my ```.zprofile``` script. This is a script that runs whenever ```zshell``` (which is what I use) opens. If you use the regular bash, you want to edit ```.bash_profile```.
 
 ```
 nano .zprofile
@@ -21,7 +20,7 @@ sudo nano /etc/environment
 SERVER_ENV="PROD"
 ```
 
-We need to log out and back in for our changes to take effect. But before that, let's adjust our server code. We can access the environment variable with the ```os.Getenv()``` method. In the code, I added a simple if statement - if the variable is "DEV", let's run a local server with HTTP. If it's "PROD", let's listen on a different port with HTTPS.
+We need to log out and back in for our changes to take effect. But before that, let's adjust our server code. We can access the environment variable with the ```os.Getenv()``` method. In the code, I added a simple if statement - if the variable is ```DEV```, let's run a local server with HTTP. If it's ```PROD```, let's listen on a different port with HTTPS.
 
 The adjusted ```main()``` function is below.
 

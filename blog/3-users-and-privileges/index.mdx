@@ -2,15 +2,12 @@
 slug: "users-and-privileges"
 title: "#3 Users & privileges"
 date: "2022-10-16"
-spoiler: "Acting as the root is risky"
 ---
-The __root__ user is an admin account - it is allowed to change any files in the system. Performing daily tasks as the root is therefore risky. A simple mistake while typing a command can have unintended consequences.
+The ```root``` user is an admin account - it is allowed to change any files in the system. Performing daily tasks as the root is therefore risky. A simple mistake while typing a command can have unintended consequences.
 
-It is a good practice to create a regular user account. A regular user (i.e. not a root) is only allowed to modify the files they have created. The regular user can still access the superuser "powers" when needed, but he has to do so explicitly. This is done by prefixing a command with ```sudo```. The user needs to be a so called __sudoer__ to be able to use the sudo command.
+It's a good practice to create a regular user account. A regular user (i.e. not ```root```) is only allowed to modify the files they have created. The regular user can still access the superuser "powers" when needed, but he has to do so explicitly. This is done by prefixing a command with ```sudo```. The user needs to be a so called __sudoer__ to be able to use the sudo command.
 
-We need a create a new sudo user on our server.
-
-The user id of such a user must be included in the sudoers file.
+We need a create a new sudo user on our server. The user id of such a user must be included in the sudoers file.
 
 First, let's add a new user ```juraj```. We will be prompted to create a new password and some user's details. We can skip the irrelevant ones by pressing Enter.
 ```
@@ -47,7 +44,7 @@ root@server:~# id juraj
 uid=1000(juraj) gid=1000(juraj) groups=1000(juraj),27(sudo)
 ```
 
-Now I can login as ```juraj```:
+Now I can login to my server as ```juraj```:
 
 ```
 ssh juraj@api.jurajmajerik.com

@@ -2,13 +2,12 @@
 slug: "domain-and-dns"
 title: "#2 Domain & DNS"
 date: "2022-10-15"
-spoiler: "Use a domain instead of IP"
 ---
-Let's connect a domain to our server. This will save us from having to type the IP address when logging in, but also when calling our server's APIs in the future.
+Let's connect a domain to our server. This will save us from having to type the IP address when logging in and calling our server's APIs in the future.
 
 I already own the domain __jurajmajerik.com__. I'm just going to add the ```api.``` prefix before it and assign it to the server IP.
 
-My domain is managed by GoDaddy. In their interface, I added a new [A record](https://support.dnsimple.com/articles/differences-between-a-cname-alias-url/) with the name "api" and pointed it to my server's IPv4 address.
+My domain is managed by GoDaddy. In their interface, I added a new [A record](https://support.dnsimple.com/articles/differences-between-a-cname-alias-url/) with the name ```api``` and pointed it to my server's IPv4 address.
 
 ![Godaddy DNS setup](./domain.png)
 
