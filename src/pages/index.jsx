@@ -32,7 +32,7 @@ const IndexPage = ({ data }) => (
                 <h3 className="text-base font-medium tracking-normal text-zinc-800 dark:text-zinc-100">
                   {node.frontmatter.title}
                 </h3>
-                <small className="font-light mt-1 text-sm text-zinc-500 dark:text-zinc-500">
+                <small className="mt-1 text-sm text-zinc-500 dark:text-zinc-300">
                   {node.frontmatter.date}
                 </small>
                 <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400 excerpt">{excerpt}</p>
