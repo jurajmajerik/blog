@@ -60,31 +60,3 @@ docker compose up -d
 ```
 
 Head to the browser and verify that we get our data back from [http://localhost:8080/drivers](http://localhost:8080/drivers). Our two containers are now connected!
-
-Let's now switch to running our app with Docker Compose also on our production server. First, verify Docker Compose is already installed:
-```bash
-juraj@server:~$ docker compose version
-Docker Compose version v2.12.2
-```
-
-We need to pass the port number as an environment variable. Let's update the `ports` option in `docker-compose.yml`:
-```yml
-services:
-  app:
-    image: app
-    ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
-    # ...
-```
-
-We can pass environment variable by simply prepending it before the `docker compose up` command:
-
-```bash
-SERVER_PORT=8080 docker compose up -d
-```
-
-Finally, let's update the start command in `prod_deploy.sh` and deploy!
-```bash
-msg "Starting containers"
-SERVER_PORT=8080 sudo docker compose up -d
-```
