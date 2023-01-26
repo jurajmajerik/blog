@@ -4,7 +4,7 @@ title: "#17 SQL setup"
 date: "2023-01-03"
 branch: "sql-setup"
 ---
-We will use PostgreSQL as our database for persisting data on drivers, riders, and trips. Postgres is open-source, can handle large amounts of reads and writes, and supports transactions. It has a long track record and a strong community behind it. In the past, Uber has also used Postgres as its primary data store.
+We will use PostgreSQL to persist the data on drivers, riders, and trips. PostgreSQL (aka "Postgres") is open-source, can handle large amounts of reads and writes, and supports transactions. It has a long track record and a strong community behind it. In the past, Uber has also used Postgres as its primary data store.
 
 Thanks to Docker, setting up Postgres is a breeze. We don't need a build step via a Dockerfile, as everything is taken care of via the base image. To start a Docker container, run the following:
 ```

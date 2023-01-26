@@ -19,7 +19,7 @@ The answer is they connect via a *network*. Any two containers that share the sa
 Docker Compose allows us to spin up multi-container applications easily. As the number of containers in our application grows, it's becoming impractical to start containers individually. With Docker Compose, we can define our stack within a single `docker-compose.yml` file and start everything with a single command. We can also define the network these containers will share within the file. This will allow us to connect our two containers.
 
 Our `docker-compose.yml` file is structured as follows:
-```
+```yml
 services:
   app:
     image: app
@@ -55,8 +55,36 @@ func InitDB() {
 }
 ```
 Now rebuild the image and start the app with Docker Compose:
-```
+```bash
 docker compose up -d
 ```
 
 Head to the browser and verify that we get our data back from [http://localhost:8080/drivers](http://localhost:8080/drivers). Our two containers are now connected!
+
+Let's now switch to running our app with Docker Compose also on our production server. First, verify Docker Compose is already installed:
+```bash
+juraj@server:~$ docker compose version
+Docker Compose version v2.12.2
+```
+
+We need to pass the port number as an environment variable. Let's update the `ports` option in `docker-compose.yml`:
+```yml
+services:
+  app:
+    image: app
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    # ...
+```
+
+We can pass environment variable by simply prepending it before the `docker compose up` command:
+
+```bash
+SERVER_PORT=8080 docker compose up -d
+```
+
+Finally, let's update the start command in `prod_deploy.sh` and deploy!
+```bash
+msg "Starting containers"
+SERVER_PORT=8080 sudo docker compose up -d
+```

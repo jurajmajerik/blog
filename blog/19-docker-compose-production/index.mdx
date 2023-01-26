@@ -1,0 +1,69 @@
+---
+slug: "docker-compose-production"
+title: "#20 Docker Compose in production"
+date: "2023-01-26"
+branch: "docker-compose-production"
+---
+There are a few more things we need to do to be able to run our app in production with Docker Compose.
+
+First, let's switch to using a `.env` file to store our environment variables. Docker Compose will read the environment variables from this file when running our stack. This file is private to the machine and not committed to the repository.
+
+Let's add the first `.env` file at the top level of the `app` directory on our local macOS. We'll add the second one to our production server in a minute.
+```bash
+SERVER_PORT=8080
+SERVER_ENV=DEV
+```
+
+Now we need to reference our environment variables in `docker-compose.yml`. We also need to add a bind mount for the directory where our SSL certificate is stored. This directory only lives on the production server, but Docker Compose won't complain about this when running locally.
+```yml
+services:
+  app:
+    image: app
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    environment:
+      SERVER_ENV: ${SERVER_ENV}
+
+  # ...
+```
+
+Let's now update `prod_deploy.sh` to start our stack with Docker Compose:
+```bash
+# ...
+
+msg "Stopping containers"
+sudo docker compose down
+
+msg "Starting containers"
+sudo docker compose up -d
+
+# ...
+```
+
+Now let's hop onto our production server. First, verify Docker Compose is already installed:
+```bash
+juraj@server:~$ docker compose version
+Docker Compose version v2.12.2
+```
+
+We need to stop the currently running container before starting the stack with Docker Compose.
+```bash
+sudo docker stop app
+sudo docker rm app
+```
+
+Now pull the code from Github. Add the `.env` file.
+```bash
+SERVER_PORT=443
+SERVER_ENV=PROD
+```
+
+Next, we need to populate our database. Just follow the steps from the post [#17 SQL setup](https://jurajmajerik.com/blog/sql-setup/). Then return to the local machine and deploy the app.
+```bash
+./deploy.sh
+```
+
+Finally, head to the browser and check [https://app.jurajmajerik.com/drivers](https://app.jurajmajerik.com/drivers). Our Docker Compose stack is running in production!
+![api in browser](./img-1.png)
