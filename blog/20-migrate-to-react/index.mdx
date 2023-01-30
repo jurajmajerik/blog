@@ -1,0 +1,88 @@
+---
+slug: "migrate-to-react"
+title: "#21 Migrating to React"
+date: "2023-01-30"
+branch: "migrate-to-react"
+tags: ['ui']
+---
+I started out writing the frontend application in vanilla Javascript. This was sufficient to illustrate the [basic concepts](https://jurajmajerik.com/blog/build-graph/). But soon, our application is going to grow in the frontend significantly, introducing more complexity. To keep our sanity, let's use one of the better tools for the job.
+
+I have experience with React and I love it. It allows me to split the UI into logical components and write those components in a declarative way. This is done using the JSX syntax, which is writing HTML-like code directly within Javascript.
+
+"Declarative" means that we are not performing direct updates to components. We *declare* how the components should look based on the state passed to them. Any time the state changes, React takes care of updating the components. It does so in an optimized and performant way.
+
+Setting up a React app is simple. Let's use the `create-react-app` utility from the creators of React. In the root directory of our app, run:
+```bash
+npx create-react-app frontend
+```
+
+This creates the `frontend` folder with the minimal setup for the project. It also sets up the entire toolchain required to compile `.jsx` files into `.js`. It also comes with a development server with live reloading, making frontend development very convenient. Once the setup is done, run `npm start` and head to [http://localhost:3000/](http://localhost:3000/). Any change saved in source files is reloaded live to the browser.
+
+All our frontend source files will now live in `/app/frontend/src`. Here's how I rewrote the SVG map from pure ```.js``` to ```.jsx```:
+
+```jsx
+// See the repository for the full list of changes
+// ...
+const SVG = () => {
+  const squareSize = gridSize / gridCount;
+  const Rect = ({ type, x, y, color }) => (
+    <rect
+      width={squareSize}
+      height={squareSize}
+      x={x}
+      y={y}
+      fill={ type === 'road' ? 'white' : (color || '#d77a61') }
+      stroke={ type === 'road' ? 'white' : (color || '#d77a61') }
+    />
+  );
+
+  const rects = [];
+  for (let [key, value] of Object.entries(points)) {
+    const [x, y] = key.split(':');
+    const { color, type } = value;
+    rects.push(
+      <Rect
+        key={`${x}:${y}`}
+        type={type}
+        x={x * squareSize}
+        y={y * squareSize}
+        color={color}
+      />
+    );
+  }
+
+  return (
+    <svg
+      width={gridSize}
+      height={gridSize}
+    >
+      {rects}
+    </svg>
+  )
+};
+// ...
+```
+Again, the key difference is that we no longer perform direct updates to individual components. After the initial load, React renders the entire tree of HTML elements. When we change the state, React will traverse the tree and update the necessary components.
+
+Let's now deploy the app. Before we do so, we need to build our frontend bundle:
+```bash
+npm build
+```
+
+In this case, I chose to create my builds locally and push them to the repository. By doing this, we avoid having to download the entire ```node_modules``` on the production server (required for the build step). This would significantly slow down our deployments. To add the build step, add the following to `deploy.sh`:
+```bash
+cd frontend
+npm run build
+cd ..
+git add .
+git commit -m "build"
+git push
+# ...
+```
+
+Let's also adjust our server code to serve the optimized bundles from the build directory:
+```go
+http.Handle("/", http.FileServer(http.Dir("./frontend/build")))
+```
+
+Finally, remove the `static` folder from the app's root directory. Also remove the `COPY` step from the `Dockerfile` that references it. Then go ahead and deploy the app to production.
