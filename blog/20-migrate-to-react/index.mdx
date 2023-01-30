@@ -5,11 +5,11 @@ date: "2023-01-30"
 branch: "migrate-to-react"
 tags: ['ui']
 ---
-I started out writing the frontend application in vanilla Javascript. This was sufficient to illustrate the [basic concepts](https://jurajmajerik.com/blog/build-graph/). But soon, our application is going to grow in the frontend significantly, introducing more complexity. To keep our sanity, let's use one of the better tools for the job.
+I started out writing the frontend application in vanilla Javascript. This was sufficient to illustrate the [basic concepts](https://jurajmajerik.com/blog/build-graph/). But soon, our frontend app is going to grow in the frontend significantly, introducing more complexity. To keep our sanity, let's use one of the better tools for the job.
 
-I have experience with React and I love it. It allows me to split the UI into logical components and write those components in a declarative way. This is done using the JSX syntax, which is writing HTML-like code directly within Javascript.
+I have experience with React and I love it. It allows me to split the UI into logical components and write those components in a declarative way. This is done using the `.jsx` syntax, which is basically writing HTML-like code directly within Javascript.
 
-"Declarative" means that we are not performing direct updates to components. We *declare* how the components should look based on the state passed to them. Any time the state changes, React takes care of updating the components. It does so in an optimized and performant way.
+"Declarative" means we are not performing direct updates to components. We *declare* how the components should look based on the state passed to them. Any time the state changes, React takes care of updating the components for us. It does so in an optimized and performant way.
 
 Setting up a React app is simple. Let's use the `create-react-app` utility from the creators of React. In the root directory of our app, run:
 ```bash
