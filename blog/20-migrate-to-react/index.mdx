@@ -23,27 +23,38 @@ All our frontend source files will now live in `/app/frontend/src`. Here's how I
 ```jsx
 // See the repository for the full list of changes
 // ...
+const coordsToObstacles = [];
+obstacles.forEach(([xStart, xEnd, yStart, yEnd, color]) => {
+  let x = xStart;
+  while (x <= xEnd) {
+    let y = yStart;
+    while (y <= yEnd) {
+      coordsToObstacles[`${x}:${y}`] = color || '#d77a61';
+      y += 1;
+    }
+    x += 1;
+  }
+});
+
 const SVG = () => {
   const squareSize = gridSize / gridCount;
-  const Rect = ({ type, x, y, color }) => (
+  const Obstacle = ({ type, x, y, color }) => (
     <rect
       width={squareSize}
       height={squareSize}
       x={x}
       y={y}
-      fill={ type === 'road' ? 'white' : (color || '#d77a61') }
-      stroke={ type === 'road' ? 'white' : (color || '#d77a61') }
+      fill={color}
+      stroke={color}
     />
   );
 
-  const rects = [];
-  for (let [key, value] of Object.entries(points)) {
+  const obstacleElems = [];
+  for (let [key, color] of Object.entries(coordsToObstacles)) {
     const [x, y] = key.split(':');
-    const { color, type } = value;
-    rects.push(
-      <Rect
+    obstacleElems.push(
+      <Obstacle
         key={`${x}:${y}`}
-        type={type}
         x={x * squareSize}
         y={y * squareSize}
         color={color}
@@ -56,13 +67,15 @@ const SVG = () => {
       width={gridSize}
       height={gridSize}
     >
-      {rects}
+      {obstacleElems}
     </svg>
   )
 };
 // ...
 ```
 Again, the key difference is that we no longer perform direct updates to individual components. After the initial load, React renders the entire tree of HTML elements. When we change the state, React will traverse the tree and update the necessary components.
+
+You might have noticed I removed the part where I generate the graph. I realized we won't need it in the frontend. The simulation engine will have its own graph for generating routes and it will provide the route to the frontend. So for now, all we need are the coordinates of obstacles.
 
 Let's now deploy the app. Before we do so, we need to build our frontend bundle:
 ```bash
