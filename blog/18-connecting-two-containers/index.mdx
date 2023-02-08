@@ -4,7 +4,7 @@ title: "#19 Connecting two containers"
 date: "2023-01-25"
 branch: "connect-two-containers"
 ---
-There's an issue with our implementation in the last post. Have you spotted it?
+There's an issue with our implementation from the last post. Have you spotted it?
 
 We are running our server code outside a container with `go run main.go`. The server connects to the database container via port `5432` on the host machine. This works because the database container maps its port to the port on the host machine.
 
