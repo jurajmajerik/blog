@@ -82,11 +82,25 @@ const turnsDuration = turnCount * turnDuration;
 const steps = (fetchInterval - turnsDuration) / refreshInterval;
 ```
 
-Whenever a car arrives at a new coordinate within a section, we might need to rotate it. We only do this from the index `1` of a section onwards (remember that we need two points to determine the rotation).
+Next, let's add the `rotateBusy` property to the constructor of car. It's possible that halfway through a rotation, we will receive a new coordinate and start moving towards it. We can't do it before we complete the current rotation. This field will keep track of it.
+```js
+constructor(props) {
+  // ...
+  this.rotateBusy = false;
+  // ...
+}
+```
+
+Whenever a car arrives at a new coordinate within a section, we can rotate it. We only do this from the index `1` of a section onwards (remember that we need two points to determine the rotation). If there is a rotation already running, we wait for it to complete before beginning a new one.
 ```js
     // ...
     for (let i = 0; i < section.length; i++) {
-      if (i > 0) await this.rotate(section, i);
+      if (i > 0) {
+        while (this.rotateBusy) {
+          await wait(refreshInterval);
+        }
+        await this.rotate(section, i);
+      }
       // ...
     }
     // ...
@@ -95,9 +109,11 @@ Whenever a car arrives at a new coordinate within a section, we might need to ro
 Finally, let's add the `rotate()` method. We determine the direction of the turn and start incrementing or decrementing the degrees of rotation. We keep doing this until we reach the desired rotation.
 ```js
 async rotate(section, i) {
+  this.rotateBusy = true;
+
   let rotation = this.state.rotation;
   const targetRotation = getRotation(section, i);
-  if (this.state.rotation === targetRotation) return;
+  if (this.state.rotation === targetRotation) return this.rotateBusy = false;
 
   const { distClockwise, distCounterclockwise } = getTurnDistance(rotation, targetRotation);
   const isClockwise = distClockwise < distCounterclockwise;
@@ -110,20 +126,16 @@ async rotate(section, i) {
     if (isClockwise) rotation += increment;
     else rotation -= increment;
 
-    if (targetRotation === 0 && rotation > 360) rotation = 0;
+    if (rotation > 360) rotation = 0;
     else if (rotation < 0) rotation = 360 - Math.abs(rotation);
-    else if (targetRotation !== 0 && isClockwise && rotation > targetRotation) rotation = targetRotation;
 
-    this.setState(state => ({ // eslint-disable-line
-      position: state.position,
-      rotation,
-      path: state.path,
-    }));
+    this.setState({ rotation });
     await wait(refreshInterval);
   }
+
+  this.rotateBusy = false;
 }
 ```
-*Within the loop, I've had to add a couple of if statements to deal with the edge cases when the rotation goes over the target. I don't know where I made a mistake. The increments are calculated such that they should always add up to the target without a remainder. I'll update this section once I debug this.*
 
 Now let's have a look at the fruits of our work!
 `youtube: https://www.youtube.com/watch?v=8yF3ALgKsCw`

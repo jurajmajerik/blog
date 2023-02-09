@@ -59,7 +59,7 @@ In that case, we should stop our current animation and kick off a new animation 
 
 ![car svg](./img-2.png)
 
-For completeness, what happens if we complete the animation and still haven't received a new location update? No big deal - the car will just stop moving and wait for the new coordinates.
+For completeness, what happens if we finish an animation cycle and still haven't received a new location update? No big deal - the car will just stop moving and wait for the new coordinates.
 
 Now let's dive into the implementation. The utility methods for implementing the animation live in `movement.js`. First, we need a method to find the next coordinate on the path from our current point.
 
