@@ -95,7 +95,7 @@ export const advanceCoord = (curr, next, increment) => {
   return curr;
 };
 ```
-I've added unit tests for these methods in `movement.test.js`. The `create-react-app` already has the Jest testing library fully set up. When you run `npm run test`, all files ending with `*.test.js* are being ran in a `watch` mode. The tests are re-run whenever you save your changes, giving us a nice iteration cycle.
+I've added unit tests for these methods in `movement.test.js`. The `create-react-app` already has the Jest testing library fully set up. When you run `npm run test`, all files ending with `*.test.js*` are being ran in the `watch` mode. The tests are re-run whenever you save your changes, giving us a nice iteration cycle.
 
 Finally, let's put everything together in the `move()` method of the `Car` class. When we receive a next point, we will calculate the upcoming section, and the increment and start updating the coordinates. After calculating a new update, we set a new state of the `Car`, triggering a re-render of the visual. We wait for the duration of the `refreshInterval` between recalculating again.
 ```js
