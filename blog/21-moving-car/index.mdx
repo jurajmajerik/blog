@@ -99,47 +99,41 @@ I've added unit tests for these methods in `movement.test.js`. The `create-react
 
 Finally, let's put everything together in the `move()` method of the `Car` class. When we receive a next point, we will calculate the upcoming section, and the increment and start updating the coordinates. After calculating a new update, we set a new state of the `Car`, triggering a re-render of the visual. We wait for the duration of the `refreshInterval` between recalculating again.
 ```js
-  async move(next) {
-    const { path, position } = this.state;
-    let [currX, currY] = position;
-  
-    const startIndex = getNextCoordIndex(currX, currY, path);
-    const endIndex = path.findIndex(([x, y]) => {
-      return x === next[0] && y === next[1];
-    });
-    const section = path.slice(startIndex, endIndex + 1);
+async move(next) {
+  const { path, position } = this.state;
+  let [currX, currY] = position;
 
-    const distance = endIndex - startIndex + Math.max(currX % 1, currY % 1);
-    const steps = fetchInterval / refreshInterval;
-    const increment = distance / steps;
-  
-    for (let i = 0; i < section.length; i++) {
+  const startIndex = getNextCoordIndex(currX, currY, path);
+  const endIndex = path.findIndex(([x, y]) => {
+    return x === next[0] && y === next[1];
+  });
+  const section = path.slice(startIndex, endIndex + 1);
 
-      const [nextX, nextY] = section[i];
+  const distance = endIndex - startIndex + Math.max(currX % 1, currY % 1);
+  const steps = fetchInterval / refreshInterval;
+  const increment = distance / steps;
 
-      while (currX !== nextX) {
-        if (next !== this.props.next) return;
+  for (let i = 0; i < section.length; i++) {
 
-        currX = advanceCoord(currX, nextX, increment);
-        this.setState((state) => ({ // eslint-disable-line
-          position: [currX, state.position[1]],
-          path: state.path,
-        }));
-        await wait(refreshInterval);
-      }
+    const [nextX, nextY] = section[i];
 
-      while (currY !== nextY) {
-        if (next !== this.props.next) return;
+    while (currX !== nextX) {
+      if (next !== this.props.next) return;
 
-        currY = advanceCoord(currY, nextY, increment);
-        this.setState((state) => ({ // eslint-disable-line
-          position: [state.position[0], currY],
-          path: state.path,
-        }));
-        await wait(refreshInterval);
-      }
+      currX = advanceCoord(currX, nextX, increment);
+      this.setState({ position: [currX, this.state.position[1]] });
+      await wait(refreshInterval);
+    }
+
+    while (currY !== nextY) {
+      if (next !== this.props.next) return;
+
+      currY = advanceCoord(currY, nextY, increment);
+      this.setState({ position: [this.state.position[0], currY] });
+      await wait(refreshInterval);
     }
   }
+}
 ```
 Remember that whenever the `next` parameter changes (stored in `this.props`), we want to stop the current animation and let the next animation take over. That's why we are constantly checking the value of this parameter in every update cycle:
 ```js
@@ -173,18 +167,16 @@ const records = [
 
 Then we can kick off our updates in our `Map` component, spaced 1 second in between:
 ```js
-  async simulate() {
-    for (const record of records) {
-      this.setState(state => ({
-        cars: [record]
-      }));
-      await wait(fetchInterval);
-    }
+async simulate() {
+  for (const record of records) {
+    this.setState({ cars: [record] });
+    await wait(fetchInterval);
   }
+}
 
-  componentDidMount() {
-    this.simulate();
-  }
+componentDidMount() {
+  this.simulate();
+}
 ```
 
 And here's our car dashing across the map. It looks pretty funny not making any turns. We'll address that in the next post!
