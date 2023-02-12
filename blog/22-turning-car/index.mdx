@@ -13,7 +13,7 @@ Now onto rotation. We always need two points to calculate the rotation of the ca
 
 ![car rotation](./img-1.png)
 
-Before we tackle rotating the car, we need to calculate the number of turns a car will make within a section. Remember - a *section* is part of the path a car traverses during a single animation cycle. A section starts at the car's current position on the Map and ends at the latest updated location from the server.
+Before we tackle rotating the car, we need to calculate the number of turns a car will make within a section. Recall that a *section* is part of the path a car traverses during a single animation cycle. A section starts at the car's current position on the map and ends at the latest updated location from the server.
 
 We have limited time to traverse the section (roughly the time until the next update). If we make turns while traversing a section, we need to allocate some time for them and thus subtract this time from the total time available for the traversal.
 
