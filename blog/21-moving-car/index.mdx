@@ -41,13 +41,13 @@ Initially, the frontend will receive the starting position of the car. Then it's
 
 With every received update, the frontend will animate the car's movement between its current location on the map and the newly updated location.
 
-Let's draw this out. For the sake of simplicity, let's show this on a single axis. Let's assume we are polling for an update every second - that's 1000 milliseconds. If we are to display the animation for the entirety of the time until the next update, we need to traverse four points on the map (8 -> 12) in precisely 1,000 milliseconds.
+Let's draw this out. For the sake of simplicity, let's show this on a single axis. Let's assume we are polling for an update every second - that's 1,000 milliseconds. If we are to display the animation for the entirety of the time until the next update, we need to traverse four points on the map (8 -> 12) in precisely 1,000 milliseconds.
 
 ![car animation](./img-1.png)
 
 How many steps are we going to animate in the 1,000 milliseconds? Thirty frames per second should give us a smooth visual. So 1,000 ms / 30 frames = 1 update every ~33 milliseconds.
 
-*You might've noticed a catch. One thousand milliseconds is the time between requests are made. Of course, it takes additional time for the response to get back. At this point, we don't need to worry about it. We'll mock the location updates in the frontend, giving us a new location exactly every 1,000 milliseconds. Once we incorporate a real API call, we will account for the extra response time.*
+*You might've noticed a catch. One thousand milliseconds is the time between requests are made. But it takes additional time for the response to get back. At this point, we don't need to worry about it. We'll mock the location updates in the frontend, giving us a new location exactly every 1,000 milliseconds. Once we incorporate a real API call, we will account for the extra response time.*
 
 Now that we know how many updates we want to perform within our update window, we can calculate the update increment. The distance between 8 and 12 is 4. Dividing the distance of 4 with our number of updates (30) gives us 0.1333. That means, every ~33 milliseconds, we will move the car on the map by 0.1333 pixels.
 
@@ -55,11 +55,11 @@ The set of coordinates between the current location on the map and the up-to-dat
 
 Here's one important detail to consider. Suppose we receive a location update and start moving the car on the map toward point `12`. When we are at `11.43`, we already receive an update with a new location. This is guaranteed to happen once we start polling an actual API. What should we do then?
 
-In that case, we should stop our current animation and kick off a new animation round. The new animation will calculate a new section to traverse. This new section's start will be the map's current location. That is, the furthest point we got to during our latest animation.
+In that case, we should stop our current animation and kick off a new animation round. The new animation will calculate a new section to traverse. The new section's start will be the map's current location. That is, the furthest point we got to during our latest animation.
 
 ![car svg](./img-2.png)
 
-For completeness, what happens if we finish an animation cycle and still haven't received a new location update? No big deal - the car will just stop moving and wait for the new coordinates.
+And for completeness, what happens if we finish an animation cycle and still haven't received a new location update? No big deal - the car will just stop moving and wait for the new coordinates.
 
 Now let's dive into the implementation. The utility methods for implementing the animation live in `movement.js`. First, we need a method to find the next coordinate on the path from our current point.
 
@@ -97,7 +97,7 @@ export const advanceCoord = (curr, next, increment) => {
 ```
 I've added unit tests for these methods in `movement.test.js`. The `create-react-app` already has the Jest testing library fully set up. When you run `npm run test`, all files ending with `*.test.js*` are being ran in the `watch` mode. The tests are re-run whenever you save your changes, giving us a nice iteration cycle.
 
-Finally, let's put everything together in the `move()` method of the `Car` class. When we receive a next point, we will calculate the upcoming section, and the increment and start updating the coordinates. After calculating a new update, we set a new state of the `Car`, triggering a re-render of the visual. We wait for the duration of the `refreshInterval` between recalculating again.
+Finally, let's put everything together in the `move()` method of the `Car` class. When we receive a next point, we will calculate the upcoming section, and the increment, and then start updating the coordinates. After calculating the new update, we set a new state of the `Car`, triggering a re-render of the visual. We wait for the duration of the `refreshInterval` between recalculating again.
 ```js
 async move(next) {
   const { path, position } = this.state;
@@ -165,7 +165,7 @@ const records = [
 ];
 ```
 
-Then we can kick off our updates in our `Map` component, spaced 1 second in between:
+Then we can kick off our updates in our `Map` component, spaced one second in between:
 ```js
 async simulate() {
   for (const record of records) {

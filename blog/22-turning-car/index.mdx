@@ -5,12 +5,11 @@ date: "2023-02-08"
 branch: "turning-car"
 tags: ['ui']
 ---
-
 The only thing our car animation needs are turns. Let's finish it up.
 
 A brief housekeeping first. Because our UI is growing, I've split out the `Map` and the `Car` components into separate files. I've also added the `config.js` file that holds all the configuration constants. Some of them are shared by both components, so it's handy to keep them in a single location.
 
-Now onto rotation. We always need two points to calculate the rotation of the car - the current coordinate and the previous coordinate. Suppose the initial car position is `[7,20]`. If the next location is `[8, 20]`, we know the car is advancing on the x-axis in the *westerly* direction. Therefore, its azimuth is 90 degrees. Setting the `transform: rotate()` property of the car to 90 degrees will get us the desired rotation.
+Now onto rotation. We always need two points to calculate the rotation of the car - the current and the previous coordinate. Suppose the initial car position is `[7,20]`. If the next location is `[8, 20]`, we know the car is advancing on the x-axis towards *east*. Therefore, its azimuth is 90 degrees. Setting the `transform: rotate(x)` property of the car to 90 degrees will get us the desired rotation.
 
 ![car rotation](./img-1.png)
 
@@ -91,7 +90,7 @@ constructor(props) {
 }
 ```
 
-Whenever a car arrives at a new coordinate within a section, we can rotate it. We only do this from the index `1` of a section onwards (remember that we need two points to determine the rotation). If there is a rotation already running, we wait for it to complete before beginning a new one.
+Whenever a car arrives at a new coordinate within a section, we can rotate it. We only do this from the index `1` of a section onwards (remember that we need two points to determine the rotation). If there is a rotation currently underway, we wait for it to complete before beginning a new one.
 ```js
     // ...
     for (let i = 0; i < section.length; i++) {
