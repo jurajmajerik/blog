@@ -1,0 +1,185 @@
+---
+slug: "server-generated-data"
+title: "#26 Server-generated data"
+date: "2023-02-16"
+branch: "server-generated-data"
+tags: ['ui']
+---
+Let's generate location updates on the server and make them available to the client via an API.
+
+For start, let's create a file `dbconfig.json` that will store our database configuration.
+```json
+{
+  "user": "postgres",
+  "password": "mysecretpassword",
+  "host": "db",
+  "port": 5432,
+  "dbname": "postgres"
+}
+```
+We will import `dbconfig.json` into the two components accessing our database: the web server and the simulation. To make sure the file is available in both containers, we need to update their respective Dockerfiles in the `server` and the `simulation` folders:
+```dockerfile
+COPY dbconfig.json .
+```
+
+Let's now update `db.go` to load the configuration from `dbconfig.json` rather than hardcoding it. Here we open the file, decode it into a `config` variable using the `Config` struct and then create the connection string using the `config` values.
+```go
+type Config struct {
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	DBname   string `json:"dbname"`
+}
+
+// initDB creates a new instance of DB
+func InitDB() {
+	configFile, err := os.Open("../dbconfig.json")
+	if err != nil {
+		log.Fatal("Error opening dbconfig.json:", err)
+	}
+	defer configFile.Close()
+
+	var config Config
+	jsonParser := json.NewDecoder(configFile)
+	if err = jsonParser.Decode(&config); err != nil {
+		log.Fatal("Error decoding dbconfig.json", err)
+	}
+
+	connStr := fmt.Sprintf(
+		"user=%s password=%s host=%s port=%d dbname=%s sslmode=disable",
+		config.User, config.Password, config.Host, config.Port, config.DBname,
+	)
+
+  # ...
+}
+```
+
+
+
+Let's now edit `simulation/main.js`. Here, we will generate simple stream of data that will allow us to check the correctness of our animation code in the frontend. Similarly as in `server/db.go`, let's initiate the database connector using `dbconfig.json`. At the start, we need to wait a few seconds to give the database container some time to initiate.
+```js
+const fs = require('fs');
+const { Client } = require('pg');
+const dbConfig = JSON.parse(fs.readFileSync('../dbconfig.json', 'utf8'));
+
+const main = async () => {
+  await wait (5000);
+
+  const { host, port, user, password, dbname } = dbConfig;
+  const client = new Client({ host, port, user, password, database: dbname });
+
+  client.connect((err) => {
+    if (err) console.error('connection error', err.stack);
+    else console.log('connected');
+  });
+
+  // ...
+};
+main();
+```
+
+Now, how can we actually generate a stream of data? For now, we can use a series of coordinates that will form a cycle on the map. For that, we need two paths. A car will start along the first path. Once it completes it, it will switch to the second path. Afterwards, it will start traversing the first path again. This will go on indefinitely.
+```js
+const paths = {
+  first: [
+    [8,17],
+    [8,16],
+    // ...
+    [16,12],
+  ],
+  second: [
+    [16,12],
+    [16,11],
+    // ...
+    [8,17],
+  ]
+};
+```
+
+Now, we can set up our loop for pushing location updates. Every 200 ms, we will update the row in the `rides` table with the new location. We also update the path, in case the path changes. Notice that the query is an upsert operation. If the row doesn't exist, it will create it, otherwise it will update the existing one. We do this so that we don't have to initialize this row manually.
+```js
+const main = async () => {
+  // ...
+
+  let path = 'first';
+  let i = 0;
+  while (true) {
+    const [x, y] = paths[path][i];
+
+    const res = await client.query(
+      `
+      INSERT INTO rides (car_id, location, path) 
+      VALUES ('car1', '${x}:${y}', '${JSON.stringify(paths[path])}')
+      ON CONFLICT (car_id) 
+      DO UPDATE SET location = EXCLUDED.location, path = EXCLUDED.path;
+      `
+    );
+    if (res.rowCount) console.log(`${x}:${y}`);
+
+    if (i === paths[path].length - 1) {
+      path = path === 'first' ? 'second' : 'first';
+      i = 0;
+      await wait(3000);
+    } else {
+      i++;
+    }
+    await wait(200);
+  }
+};
+```
+
+*You may be asking - can't we just merge these two paths into a single path, loop over it, and once we reach the end, start the loop from the beginning again? Recall that we are passing the path to the [move() method](https://jurajmajerik.com/blog/moving-car/) in the frontend. This method looks for the current position on the path and assumes that no coordinate appears more than once on the path. This is a reasonable assumption - if you are traversing a path, you don't want to visit any point twice. So for creating our cycle, we need to set up our iteration as shown above.*
+
+Before we run the simulation container, we need to set up the `rides` table in our database. On both the local machine and the production server, let's open a terminal session in the database container with `sudo docker exec -it app-db-1 bash` and initiate the table:
+```sql
+CREATE TABLE rides (
+  id SERIAL PRIMARY KEY,
+  car_id VARCHAR(255) UNIQUE NOT NULL,
+  location VARCHAR(255) NOT NULL,
+  path TEXT
+);
+```
+
+Finally, in `server/main.go`, let's add a list API for retrieving all records from the rides table and add the `/rides` endpoint.
+```go
+type Ride struct {
+	Id       string `json:"id"`
+	CarId    string `json:"car_id"`
+	Location string `json:"location"`
+	Path     string `json:"path"`
+}
+
+func getRides(w http.ResponseWriter, req *http.Request) {
+	rows, err := db.Connection.Query("SELECT * FROM rides")
+	if err != nil {
+		http.Error(w, "Failed to get rides: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var rides []Ride
+
+	for rows.Next() {
+		var ride Ride
+		rows.Scan(&ride.Id, &ride.CarId, &ride.Location, &ride.Path)
+		rides = append(rides, ride)
+	}
+
+	ridesBytes, _ := json.MarshalIndent(rides, "", "\t")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(ridesBytes)
+}
+
+func main() {
+  # ...
+	http.HandleFunc("/rides", getRides)
+  # ...
+}
+```
+*Previously we used the `/drivers` endpoint to test the database connection. We can remove it now, along with its associated handler.*
+
+Now we are ready to test our changes. Start the stack, head to Docker Desktop, and peek into the simulation container. Since we are logging every coordinate after a database update, you should see the stream of the generated data. Then head to the browser, and visit the `/rides` endpoint. Refresh it a few times and check that you are polling the updated location.
+
+`youtube: https://www.youtube.com/watch?v=qiBS67Fog3g`

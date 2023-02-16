@@ -47,7 +47,7 @@ Let's draw this out. For the sake of simplicity, let's show this on a single axi
 
 How many steps are we going to animate in the 1,000 milliseconds? Thirty frames per second should give us a smooth visual. So 1,000 ms / 30 frames = 1 update every ~33 milliseconds.
 
-*You might've noticed a catch. One thousand milliseconds is the time between requests are made. But it takes additional time for the response to get back. At this point, we don't need to worry about it. We'll mock the location updates in the frontend, giving us a new location exactly every 1,000 milliseconds. Once we incorporate a real API call, we will account for the extra response time.*
+*You might've noticed a catch. One thousand milliseconds is the time between requests are made. But it takes additional time for the response to get back. But at this point, we don't need to worry about it. We'll mock the location updates in the frontend, giving us a new location exactly every 1,000 milliseconds. Once we incorporate a real API call, we will account for the extra response time.*
 
 Now that we know how many updates we want to perform within our update window, we can calculate the update increment. The distance between 8 and 12 is 4. Dividing the distance of 4 with our number of updates (30) gives us 0.1333. That means, every ~33 milliseconds, we will move the car on the map by 0.1333 pixels.
 
