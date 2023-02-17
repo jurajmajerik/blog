@@ -1,0 +1,114 @@
+---
+slug: "animation-fixes"
+title: "#27 Animation fixes"
+date: "2023-02-17"
+branch: "animation-fixes"
+tags: ['ui']
+---
+A few issues with our animation code only became apparent after I started fetching the server-generated data. Let's tackle them one by one.
+
+*Note that I have not included all code changes line-by-line. If you're interested in those, just compare the `animation-fixes` branch with the `server-generated-data` branch*.
+
+First, the timing of the animation is proving tricky. Let's implement some changes in the `move()` method of `Car`.
+
+Let's start with a naming change. A `Car` receives a location update from the server. The location it receives is the coordinate it needs to move *to*. Previously we used to call this point `next`. Let's change the name to `actual`. We will keep using `next` to refer to the next point on the path the car is traveling to (which might be closer than the up-to-date coordinate from the server.)
+
+Whenever we get a new `actual` from the server, we trigger the `move()` method. But here's a problem. What if the update has a new path?
+
+Previously, we were checking if the property of `this.props.next` hasn't changed. If it did, we would trigger a new animation cycle. The problem is that a car might receive an update with a new route! If that happens, and the car still hasn't arrived at the first destination, it doesn't know where to move. It has lost its original path.
+
+So no matter what, we must always finish the current animation cycle. We can continue on the new route only once the car has arrived at the destination.
+
+How do we implement this?
+First, we need a variable to track whether an animation is currently underway. We initialize it in the constructor:
+```js
+this.moveBusy = false;
+```
+
+As before, we can call `move()` whenever we receive a location update. But now, we also set the time of the latest update to the car's state and pass it to the `move()` method.
+```js
+componentDidUpdate(prevProps) {
+  if (prevProps.actual === this.props.actual) return;
+
+  const receivedAt = Date.now();
+  this.latestUpdateAt = receivedAt;
+  this.move(this.props.actual, this.props.path, receivedAt);
+}
+```
+
+Why do we need to do this? Because there might be *competing* updates! Here's an example. We can have one instance of `move()` executing. We receive a new location update, followed by another location update. If that happens, we want to discard the previous update and only proceed with the latest one.
+
+So at the start of the `move()` method, we can check if an animation is underway. If there is, we wait a bit with the current invocation of `move()`. If we find that the timestamp of the latest update no longer matches the timestamp of the invocation, we simply return from the `move()` instance. This way, we ensure that the animation runs based on the latest location update.
+```js
+async move(actual, path, receivedAt) {
+  while (this.moveBusy) {
+    await wait(100);
+    if (receivedAt !== this.latestUpdateAt) return;
+  }
+
+  this.moveBusy = true;
+  // ...
+```
+
+Now we can move on to `Map`. Here, let's add the `loadData()` method. This method is called when the `Map` mounts, and it keeps fetching new data indefinitely.
+
+First, we fetch the list of rides with `api.get()`. This simple wrapper around the fetch API sets the API URL, which is different in development vs. production. Have a look at `utils.js` for more details.
+```js
+async loadData() {
+  while (true) {
+    const rides = await api.get('/rides');
+
+    // ...
+  }
+}
+```
+
+The following block deals with the issue called *timer throttling*. When a user switches focus to a different browser tab, the execution of our script slows down. Browsers do this to improve CPU utilization and save battery. For us, this is problematic as our animation depends on (more or less) precise timing. So here, we are measuring the time between now and the previous update. The server polls should happen in intervals of 1,500 ms. If there is a gap of more than 2,000 ms, that tells us the tab is being throttled. In that case, we will freeze the map while continuing to measure the time difference. Once it gets back to normal, we will re-render the whole map from scratch.
+```js
+async loadData() {
+  while (true) {
+    // ...
+
+    const timeout = 2000;
+    const now = Date.now();
+    if ((now - this.previousUpdateAt) > timeout) {
+      this.previousUpdateAt = now;
+      this.setState({ cars: [], refreshing: true });
+      await wait(fetchInterval);
+      continue;
+    }
+
+    // ...
+  }
+}
+```
+
+If everything seems well with the timing, we will update the state of our UI.
+```js
+async loadData() {
+  while (true) {
+    // ...
+
+    this.previousUpdateAt = now;
+
+    const cars = [];
+    for (const ride of rides) {
+      const { car_id, location } = ride;
+      const path = JSON.parse(ride.path);
+      const [x, y] = location.split(':');
+      cars.push({
+        id: car_id,
+        path: path,
+        actual: [parseInt(x), parseInt(y)],
+      });
+    }
+
+    this.setState({ cars, refreshing: false });
+    await wait(fetchInterval);
+  }
+}
+```
+
+Finally, I added a div that overlays the map once it freezes. I also added a `circle` element that displays the `actual` location that our car is "chasing". This proved quite helpful when debugging the timing issues.
+
+`youtube: https://www.youtube.com/watch?v=vt3GOg0UUFc`
