@@ -1,0 +1,113 @@
+---
+slug: "simulation-engine"
+title: "#28 Simulation engine"
+date: "2023-02-22"
+branch: "simulation-engine"
+tags: ['node']
+---
+Today, we are starting to build the simulation engine. Let's see how it's going to operate.
+
+The simulation engine is going to have *entities*. An entity can be a driver or a customer. Let's consider the customer entity.
+
+A customer will be modeled with the Customer class. The essence of the simulation is this: every *n* milliseconds, the customer will make a certain decision. The time interval between decisions is the *refresh rate*.
+
+What decision is the customer going to make at a given moment? That depends on *constraints*. For example, if a customer is inactive, they can decide whether to stay inactive or become active.
+
+The decision will be picked randomly from the options, with some probability. Using the same example, if a customer is inactive, they can have a 5 % chance of becoming active. That means, on average, if they are inactive, they will become active after 20 refresh cycles.
+
+There can be multiple decisions at a single decision moment. Once the customer completes the decision-making process and updates its internal state, it will update the database. Then, it will wait for the duration of the *refresh interval*, after which new decisions will be made.
+
+Here's how we implement our logic using the `Customer` class:
+```js
+class Customer {
+  constructor({ name }) {
+    this.refreshInterval = 500;
+    this.name = name;
+    this.active = false;
+    this.location = null;
+    this.simulate();
+  }
+
+  async simulate() {
+    while (true) {
+      let newActive;
+      if (this.active) newActive = decide(95);
+      else newActive = decide(5);
+
+      if (this.active !== newActive) {
+        if (newActive) {
+          const location = roadNodes[getRandomInt(0, roadNodes.length - 1)];
+          this.location = location;
+        }
+
+        this.active = newActive;
+        const res = await db.query(
+          `
+          INSERT INTO customers (name, active, location)
+          VALUES ('${this.name}', ${this.active}, '${this.location}')
+          ON CONFLICT (name)
+          DO UPDATE SET name = EXCLUDED.name, active = EXCLUDED.active, location = EXCLUDED.location;
+          `
+        );
+
+        if (!res.rowCount || res.rowCount !== 1) console.error(res);
+      }
+      await wait(this.refreshInterval);
+    }
+  }
+}
+```
+
+Next, we need to initialize the `customers` table both locally and on our production server.
+```sql
+CREATE TABLE customers (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  active BOOLEAN,
+  location VARCHAR(255) NOT NULL
+);
+```
+
+Now, let's add the `/customers` endpoint for our web server, which will return the list of active customers.
+```go
+func getCustomers(w http.ResponseWriter, req *http.Request) {
+  rows, err := db.Connection.Query("SELECT * FROM customers where active = true")
+
+    # ...
+
+  w.Write(ridesBytes)
+}
+```
+
+Finally, in the frontend, inside the Map class, let's add the `loadCustomers()` method which will periodically fetch the list of active customers and set it to state.
+```js
+async loadCustomers() {
+  while (true) {
+    const customers = await api.get('/customers');
+    this.setState({ customers });
+    await wait(fetchInterval);
+  }
+}
+```
+
+On a re-render, the `Map` will display the customers represented by the `CustomerIcon` component.
+```jsx
+const customers = this.state.customers.map(({ id, name, location }) => {
+  const [x, y] = location.split(':');
+  return (
+    <CustomerIcon
+      key={`${x}:${y}`}
+      x={x * squareSize - (squareSize / 2)}
+      y={y * squareSize - (squareSize / 2)}
+    />
+  );
+});
+```
+
+And this is how it looks like on the map. The cars are not aware of the customers yet, but we will address that soon!
+
+`youtube: https://www.youtube.com/watch?v=e3mvSVZUIyg`
+
+*In this iteration, I did some more refactoring. Check out the code branch for a full list of changes.*
+- *The simulation files now use the `module` syntax for imports and exports. This is a more up-to-date approach and is also consistent with the code style of the frontend.*
+- *I'm now storing duplicate code in `simulation/utils.js` and `frontend/src/utils.js`. This code is supposed to be shared between the two subfolders, but I have yet to find a clean way to import this library to the React app from outside of its project folder. I will fix this once I find some time for this.*
