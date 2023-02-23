@@ -5,17 +5,15 @@ date: "2023-02-22"
 branch: "simulation-engine"
 tags: ['node']
 ---
-Today, we are starting to build the simulation engine. Let's see how it's going to operate.
+Today, we are starting to build the simulation engine. Let's see how it's going to work.
 
-The simulation engine is going to simulate the behavior of *entities*. An entity can be a driver or a customer. Let's consider the customer entity.
+The simulation engine is going to simulate the behavior of drivers and customers. In the context of the simulation, let's call them *entities*.
 
-A customer will be modeled with the Customer class. The essence of the simulation is this: every *n* milliseconds, the customer will make a certain decision. The time interval between decisions is the *refresh rate*.
+Let's start with the customer entity. A customer will be modeled with the Customer class. The essence of the simulation is this: every *n* milliseconds, the customer will make a certain decision. We call the time interval between decisions the *refresh rate*.
 
-What decision is the customer going to make at a given moment? That depends on *constraints*. For example, if a customer is inactive, they can decide whether to stay inactive or become active.
+What decision is the customer going to make at a given moment? That depends on some *constraints*. For example, if a customer is inactive, they can decide whether to stay inactive or become active. The decision will be picked randomly from the available options, with some probability.
 
-The decision will be picked randomly from the options, with some probability. Using the same example, if a customer is inactive, they can have a 5 % chance of becoming active. That means, on average, if they are inactive, they will become active after 20 refresh cycles.
-
-There can be multiple decisions at a single decision moment. Once the customer completes the decision-making process and updates its internal state, it will update the database. Then, it will wait for the duration of the *refresh interval*, after which new decisions will be made.
+There can be multiple decisions at a single decision moment. Once the customer completes the decision-making process it will update the database. Then, it will wait for the duration of the *refresh interval*, after which new decision will be made.
 
 Here's how we implement our logic using the `Customer` class:
 ```js
@@ -57,6 +55,7 @@ class Customer {
   }
 }
 ```
+The `simulate()` function runs an infinite loop. If the customer is active, there is a 95 % chance they will remain active. If they are inactive, there is a 5 % chance they will become active. That means, on average, if they are inactive, they will become active after 20 refresh cycles. Similarly as with the car, we are upserting the updated state to the database.
 
 Next, we need to initialize the `customers` table both locally and on our production server.
 ```sql
@@ -104,7 +103,7 @@ const customers = this.state.customers.map(({ id, name, location }) => {
 });
 ```
 
-And this is how it looks like on the map. The cars are not aware of the customers yet, but we will address that soon!
+And this is our updated map. The cars are not aware of the customers yet, but we will address that soon!
 
 `youtube: https://www.youtube.com/watch?v=e3mvSVZUIyg`
 
