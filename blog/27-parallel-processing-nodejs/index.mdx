@@ -1,0 +1,92 @@
+---
+slug: "parallel-processing-nodejs"
+title: "#29 Parallel processing in Node.js"
+date: "2023-02-24"
+branch: "parallel-processing-nodejs"
+tags: ['node']
+---
+Here's one crucial thing to consider for our simulation. Every entity runs its simulation as an infinite loop. There will be potentially many entities. Inside the loop, we might want to do time-consuming things such as generating a destination or calculating an optimal path.
+
+Let's suppose we run a simulation of multiple entities. The simulation should refresh every 500 milliseconds. Now, imagine one of the entities executes an operation that itself takes a long time. Node.js is single-threaded and such an operation would be blocking the event loop. At that point, all the other entities would have to wait for it to complete. That would lead to a delay in the simulation loops, which is unacceptable.
+
+To address the blocking problem, we will spawn a *child process*. First, let's create a new file called `getDestination.js`. This method will generate a destination for a new customer. This computation can be quite heavy - it needs to pick up a starting point on the map, and find the destination point that is a reasonable distance away. We will cover the algorithm itself in the next post. For today, let's just assume this method is time-consuming. We can simulate the delay with a `wait()` call and return some dummy data back.
+
+A child process has its own event loop that runs independently of the event loop in the main process. If we want to send the input to getDestination and return a result back, we can do so by sending `messages`.
+```js
+import md5 from 'md5';
+import { wait } from './utils.js';
+
+const queue = [];
+
+process.on('message', ({ name, input }) => {
+  queue.push({ name, input });
+});
+
+const getDestination = async () => {
+  while (true) {
+    if (queue.length) {
+      const { name, input } = queue.shift();
+      await wait(800);
+      const destination = md5(input);
+      process.send({ name, destination });
+    }
+
+    if (queue.length) continue;
+    else await wait(200);
+  }
+};
+getDestination();
+```
+Here's what our child process does:
+- The function will grab tasks from a queue. At any given moment, multiple customers might request a generated destination. Our function can only calculate one at a time and other customers must wait. But this is fine - since `getDestination` is running as a separate process, it is not blocking the main process.
+- The main process will provide input to the child process by sending a message. In the child process, we specify what to do with the message by registering an event listener for the `message` event. In our case, we push the input into the task queue.
+- When the function grabs a task from the queue, it will calculate a dummy destination (an md5 hash of the task timestamp) and send the result back to the main process.
+
+Now back to `main.js`, which runs as our main process. First, we need to initialize the child process like so:
+```js
+// ...
+import { fork } from 'child_process';
+
+const getDestination = fork('getDestination.js');
+// ...
+```
+
+We can now interact with our child process in the same way as we are interacting with the main process from within the child process: by sending messages and listening to events. So, once a customer becomes active, we can request a destination by sending a message with input to `getDestination`:
+```js
+  async simulate() {
+    while (true) {
+        // ...
+
+        if (newActive) {
+          // ...
+
+          getDestination.send({
+            name: this.name,
+            input: `${Date.now()}`,
+          });
+        }
+
+        // ...
+  }
+```
+We don't update the database while still waiting for the destination! But let's add a method that will handle the destination. It will set the destination to the internal state and update the database:
+```js
+handleDestinationResult(destination) {
+  this.destination = destination;
+  this.updateDB();
+}
+```
+
+In the main method of `main.js`, let's store references to Customer instances. Then, once we receive a message with a destination, we can look up the target `Customer` instance and call `handleDestinationResult` handler.
+```js
+const customers = {};
+['Alice', 'Michael', 'Kate', 'Paul', 'Susan', 'Andrew'].forEach((name) => {
+  customers[name] = new Customer({ name });
+});
+
+getDestination.on('message', ({ name, destination }) => {
+  customers[name].handleDestinationResult(destination);
+});
+```
+
+And we are done. The main method and the simulation now run separate event loops, not blocking each other. In the next post, we'll look at the algorithm for generating the destination.
