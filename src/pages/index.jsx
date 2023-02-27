@@ -2,18 +2,17 @@ import * as React from 'react';
 import { Link, graphql } from 'gatsby';
 import Layout from '../layout';
 
+const colorClasses = {
+  go: 'bg-blue-500 text-white',
+  'node.js': 'bg-green-500 text-white',
+  sql: 'bg-cyan-500 text-white',
+  ui: 'bg-yellow-500 text-white',
+  bash: 'bg-red-400 text-white',
+  docker: 'bg-zinc-500 text-white',
+};
+
 const Tag = ({ name, onFilterChange }) => {
-  const baseClasses = 'ml-3 text-xs inline-flex items-center font-semibold leading-sm px-3 py-1 uppercase rounded-full border cursor-pointer';
-
-  const colorClasses = {
-    go: 'bg-blue-100 text-blue-600 border-blue-300',
-    'node.js': 'bg-green-100 text-green-600 border-green-300',
-    sql: 'bg-orange-100 text-orange-600 border-orange-300',
-    ui: 'bg-amber-100 text-amber-600 border-amber-300',
-    docker: 'bg-zinc-100 text-zinc-600 border-zinc-300',
-    bash: 'bg-rose-100 text-rose-600 border-rose-300',
-  };
-
+  const baseClasses = 'ml-3 text-xs inline-flex items-center font-semibold leading-sm px-2.5 py-0.5 uppercase rounded-full cursor-pointer';
   return (
     <div
       className={`${baseClasses} ${colorClasses[name]}`}
@@ -24,11 +23,26 @@ const Tag = ({ name, onFilterChange }) => {
   );
 };
 
+const TagMinimal = ({ name }) => {
+  const baseClasses = 'first:ml-0 ml-2 inline-flex font-semibold leading-sm h-1 w-5 uppercase rounded-full align-middle';
+  return <div className={`${baseClasses} ${colorClasses[name]}`} />;
+};
+
 const Filter = ({ onFilterChange }) => {
-  const tags = ['go', 'node.js', 'sql', 'ui', 'bash', 'docker'];
+  const tags = ['go', 'node.js', 'sql', 'bash', 'docker', 'ui'];
 
   return (
-    <div className="mt-3 mb-3">
+    <div className="
+      m-2
+      p-2
+      leading-4
+      dark:bg-gray-800
+      rounded-md border
+      border-slate-200
+      dark:border-slate-400
+    "
+    >
+      <span className="ml-1 mt-1 text-sm text-zinc-500 dark:text-zinc-400">Filter by tags</span>
       {
         tags.map((name) => (
           <Tag key={name} name={name} onFilterChange={onFilterChange} />
@@ -56,9 +70,10 @@ class IndexPage extends React.Component {
     // Construct the query
     // Render
     const { data } = this.props;
+    console.log(data);
     return (
       <Layout>
-        {/* <Filter onFilterChange={this.handleFilterChange} /> */}
+        <Filter onFilterChange={this.handleFilterChange} />
         <div className="inline-grid w-full 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           {
             data.allMdx.nodes.map((node) => {
@@ -87,6 +102,11 @@ class IndexPage extends React.Component {
                     <h3 className="text-base font-medium tracking-normal text-zinc-800 dark:text-zinc-100">
                       {node.frontmatter.title}
                     </h3>
+                    <div className="leading-4">
+                      {node.frontmatter.tags && node.frontmatter.tags.map((tagName) => (
+                        <TagMinimal key={`${node.frontmatter.id}-${tagName}`} name={tagName} />
+                      ))}
+                    </div>
                     <small className="mt-1 text-sm text-zinc-500 dark:text-zinc-300">
                       {node.frontmatter.date}
                     </small>
@@ -104,14 +124,14 @@ class IndexPage extends React.Component {
 
 export const query = graphql`
 query {
-  allMdx(sort: {frontmatter: {date: DESC}}) {
+  allMdx(sort: {frontmatter: {date: DESC}}, filter: {frontmatter: { tags: {in: ["node.js","ui"] }}}) {
     nodes {
       id
       excerpt(pruneLength: 80)
       frontmatter {
         slug
-        date(formatString: "MMMM D, YYYY")
         title
+        date(formatString: "MMMM D, YYYY")
         spoiler
         hidden
         tags
