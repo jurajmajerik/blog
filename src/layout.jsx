@@ -4,6 +4,10 @@ import { StaticImage } from 'gatsby-plugin-image';
 import { MDXProvider } from '@mdx-js/react';
 import CodeBlock from './components/CodeBlock';
 
+const LinkCustom = ({ text, to }) => (
+  <Link className="text-blue-500 hover:text-blue-600" to={to}>{text}</Link>
+);
+
 const components = {
   pre: CodeBlock,
 };
@@ -27,10 +31,16 @@ const Layout = ({ children }) => (
             <div className="mt-6 space-y-7 text-sm text-zinc-600 dark:text-zinc-400">
               <p>
                 I&#39;m Juraj, a software engineer based in Amsterdam.
-                I write about building a
-                <Link className="text-blue-500 hover:text-blue-600" to="/blog/start-here"> distributed system</Link>
+                I write about building distributed systems.
+              </p>
+
+              <p>
+                Currently working on a clone of a
+                <LinkCustom to="/blog/start-here" text=" ride-hailing app" />
+                {/* . Read more in the design document and about my motivation for doing this. */}
                 .
               </p>
+
               <p className="mt-6">
                 <a href="https://twitter.com/JurajMajerik" target="_blank" rel="noreferrer">
                   <i className="hover:text-zinc-700 fa-brands fa-twitter text-xl" />
