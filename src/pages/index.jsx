@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, graphql } from 'gatsby';
 import Layout from '../layout';
+import IconRemove from '../components/IconRemove';
 
 const colorClasses = {
   active: {
@@ -12,16 +13,16 @@ const colorClasses = {
     docker: 'bg-zinc-500 text-white',
   },
   inactive: {
-    go: 'bg-blue-400 text-white',
-    'node.js': 'bg-green-400 text-white',
-    sql: 'bg-cyan-400 text-white',
-    ui: 'bg-yellow-400 text-white',
-    bash: 'bg-red-300 text-white',
-    docker: 'bg-zinc-400 text-white',
+    go: 'bg-blue-50 border border-blue-600 text-blue-600',
+    'node.js': 'bg-green-50 border border-green-600 text-green-600',
+    sql: 'bg-cyan-50 border border-cyan-600 text-cyan-600',
+    bash: 'bg-rose-50 border border-rose-600 text-rose-600',
+    docker: 'bg-zinc-50 border border-zinc-600 text-zinc-600',
+    ui: 'bg-yellow-50 border border-yellow-600 text-yellow-600',
   },
 };
 
-const Tag = ({ name, active, onFilterChange }) => {
+const Tag = ({ name, tags, active, onFilterChange }) => {
   const baseClasses = 'ml-3 text-xs inline-flex items-center font-semibold leading-sm px-2.5 py-0.5 uppercase rounded-full cursor-pointer';
 
   const classObj = active ? colorClasses.active : colorClasses.inactive;
@@ -29,7 +30,12 @@ const Tag = ({ name, active, onFilterChange }) => {
   return (
     <div
       className={`${baseClasses} ${classObj[name]}`}
-      onClick={() => onFilterChange(name, !active)}
+      onClick={() => {
+        let newTags = [];
+        if (!active) newTags = [...tags, name];
+        else newTags = tags.filter((t) => t !== name);
+        onFilterChange(newTags);
+      }}
     >
       {name}
     </div>
@@ -42,11 +48,11 @@ const TagMinimal = ({ name }) => {
 };
 
 const Filter = ({ tags, onFilterChange }) => {
-  console.log(tags);
   const items = ['go', 'node.js', 'sql', 'bash', 'docker', 'ui'];
 
   return (
     <div className="
+      relative
       m-2
       p-2
       leading-4
@@ -56,17 +62,19 @@ const Filter = ({ tags, onFilterChange }) => {
       dark:border-slate-400
     "
     >
-      <span className="ml-1 mt-1 text-sm text-zinc-500 dark:text-zinc-400">Filter by tags</span>
+      <span className="ml-1 mt-1 text-sm text-zinc-500 dark:text-zinc-400">Filter by topics</span>
       {
         items.map((item) => (
           <Tag
             key={item}
             name={item}
+            tags={tags}
             active={tags.includes(item)}
             onFilterChange={onFilterChange}
           />
         ))
       }
+      { tags.length ? <IconRemove onFilterChange={onFilterChange} /> : null }
     </div>
   );
 };
@@ -74,9 +82,8 @@ const Filter = ({ tags, onFilterChange }) => {
 const IndexPage = ({ data }) => {
   const [tags, setTags] = useState([]);
 
-  const handleFilterChange = (tag, value) => {
-    if (value === true) setTags([...tags, tag]);
-    else setTags(tags.filter((t) => t !== tag));
+  const handleFilterChange = (newTags) => {
+    setTags(newTags);
   };
 
   let nodes = data.allMdx.nodes.filter((node) => !node.frontmatter.hidden);
@@ -99,7 +106,9 @@ const IndexPage = ({ data }) => {
               <Link key={node.id} to={`blog/${node.frontmatter.slug}`}>
                 <article
                   className="
-                    h-160
+                    relative
+                    overflow-hidden
+                    h-140
                     transition-all
                     hover:drop-shadow-sm
                     m-2
@@ -127,6 +136,16 @@ const IndexPage = ({ data }) => {
                     {node.frontmatter.date}
                   </small>
                   <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400 excerpt">{excerpt}</p>
+                  <div className="
+                    absolute
+                    bottom-0
+                    left-0
+                    right-0
+                    h-10
+                    bg-white
+                    rounded-b
+                    "
+                  />
                 </article>
               </Link>
             );
