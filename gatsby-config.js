@@ -1,12 +1,10 @@
 module.exports = {
   siteMetadata: {
     title: 'Juraj Majerik',
-    author: 'Juraj Majerik',
     description: 'Personal blog of Juraj Majerik. I write about distributed systems',
+    twitterUsername: '@jurajmajerik',
+    image: 'assets/images/favicon.ico',
     siteUrl: 'https://jurajmajerik.com',
-    social: {
-      twitter: '@JurajMajerik',
-    },
   },
   plugins: [
     {
@@ -34,6 +32,18 @@ module.exports = {
       options: {
         name: 'blog',
         path: `${__dirname}/blog`,
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        name: 'Juraj Majerik | Blog',
+        short_name: 'Juraj Majerik',
+        start_url: '/',
+        background_color: '#f7f0eb',
+        theme_color: '#a2466c',
+        display: 'standalone',
+        icon: 'assets/images/bio-rounded.png',
       },
     },
     'gatsby-plugin-postcss',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, graphql } from 'gatsby';
 import Layout from '../layout';
 import IconRemove from '../components/IconRemove';
+import SEO from '../components/seo';
 
 const colorClasses = {
   active: {
@@ -155,6 +156,8 @@ const IndexPage = ({ data }) => {
     </Layout>
   );
 };
+
+export const Head = () => <SEO />;
 
 export const query = graphql`
 query {
