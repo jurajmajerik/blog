@@ -6,25 +6,30 @@ import SEO from '../components/seo';
 
 const colorClasses = {
   active: {
-    go: 'bg-blue-500 text-white',
-    'node.js': 'bg-green-500 text-white',
-    sql: 'bg-cyan-500 text-white',
-    ui: 'bg-yellow-500 text-white',
-    bash: 'bg-red-400 text-white',
-    docker: 'bg-zinc-500 text-white',
+    go: 'bg-blue-400 text-white border-transparent',
+    'node.js': 'bg-emerald-400 text-white border-transparent',
+    sql: 'bg-cyan-500 text-white border-transparent',
+    ui: 'bg-yellow-500 text-white border-transparent',
+    bash: 'bg-red-400 text-white border-transparent',
+    docker: 'bg-zinc-500 text-white border-transparent',
   },
   inactive: {
-    go: 'bg-blue-50 border border-blue-600 text-blue-600',
-    'node.js': 'bg-green-50 border border-green-600 text-green-600',
-    sql: 'bg-cyan-50 border border-cyan-600 text-cyan-600',
-    bash: 'bg-rose-50 border border-rose-600 text-rose-600',
-    docker: 'bg-zinc-50 border border-zinc-600 text-zinc-600',
-    ui: 'bg-yellow-50 border border-yellow-600 text-yellow-600',
+    go: 'bg-blue-50 border-blue-600 text-blue-600 hover:bg-blue-100 hover:border-blue-700 hover:text-blue-700 transition-colors',
+    'node.js': 'bg-emerald-50 border-emerald-600 text-emerald-600 hover:bg-emerald-100 hover:border-emerald-700 hover:text-emerald-700',
+    sql: 'bg-cyan-50 border-cyan-600 text-cyan-600 hover:bg-cyan-100 hover:border-cyan-700 hover:text-cyan-700',
+    bash: 'bg-rose-50 border-rose-600 text-rose-600 hover:bg-rose-100 hover:border-rose-700 hover:text-rose-700',
+    docker: 'bg-zinc-50 border-zinc-600 text-zinc-600 hover:bg-zinc-100 hover:border-zinc-700 hover:text-zinc-700',
+    ui: 'bg-yellow-50 border-yellow-600 text-yellow-600 hover:bg-yellow-100 hover:border-yellow-700 hover:text-yellow-700',
   },
 };
 
-const Tag = ({ name, tags, active, onFilterChange }) => {
-  const baseClasses = 'ml-3 text-xs inline-flex items-center font-semibold leading-sm px-2.5 py-0.5 uppercase rounded-full cursor-pointer';
+const Tag = ({
+  name,
+  tags,
+  active,
+  onFilterChange,
+}) => {
+  const baseClasses = 'ml-3 text-xs inline-flex items-center font-semibold leading-sm px-2.5 py-0.5 uppercase rounded-full cursor-pointer border transition-colors';
 
   const classObj = active ? colorClasses.active : colorClasses.inactive;
 

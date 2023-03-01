@@ -5,7 +5,7 @@ import { MDXProvider } from '@mdx-js/react';
 import CodeBlock from './components/CodeBlock';
 
 const LinkCustom = ({ text, to }) => (
-  <Link className="text-blue-500 hover:text-blue-600" to={to}>{text}</Link>
+  <Link className="text-blue-500 hover:text-blue-600 transition-colors" to={to}>{text}</Link>
 );
 
 const components = {
