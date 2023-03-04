@@ -8,7 +8,7 @@ tags: ["node.js"]
 
 Here's one crucial thing to consider for our simulation. Every entity runs its simulation as an infinite loop. There will be potentially many entities. Inside the loop, we might want to do time-consuming things such as generating a destination or calculating an optimal path.
 
-Let's suppose we run a simulation of multiple entities. The simulation should refresh every 500 milliseconds. Now, imagine one of the entities executes an operation that itself takes a long time. Node.js is single-threaded and such an operation would be blocking the event loop. At that point, all the other entities would have to wait for it to complete. That would lead to a delay in the simulation loops, which is unacceptable.
+Consider a simulation of multiple entities, where each of them refreshes its state every 500 milliseconds. Now, imagine one of the entities executes a time-consuming operation. Node.js is single-threaded and such an operation would be blocking the event loop. At that point, all the other entities would have to wait for it to complete. That would lead to a delay in the simulation loops, which is unacceptable.
 
 To address the blocking problem, we will spawn a _child process_. First, let's create a new file called `getDestination.js`. This method will generate a destination for a new customer. This computation can be quite heavy - it needs to pick up a starting point on the map, and find the destination point that is a reasonable distance away. We will cover the algorithm itself in the next post. For today, let's just assume this method is time-consuming. We can simulate the delay with a `wait` call and return some dummy data back.
 
