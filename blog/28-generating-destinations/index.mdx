@@ -44,9 +44,9 @@ export const buildGraph = (
 
 _You might have noticed I migrated the codebase from JavaScript to TypeScript to ensure that the code is type-safe and easier to refactor in the future._
 
-Now onto generating destinations. A simple approach would be to generate a random road node for the destination, the same way as we're doing it for the customer locations. The problem is that the destination might be too close to the starting point. It wouldn't look good in the simulation if the destination was just two or three squares away from the start. Therefore, what we want to do here is to generate a random destination at a _reasonable distance_ away from the start.
+Now onto generating destinations. A simple approach would be to generate a random road node for the destination, the same way as we're doing it for the customer locations. The problem is that the destination might be too close to the starting point. It wouldn't look good in the simulation if the destination was just two or three squares away from the start. Therefore, we want to generate a random destination at a _reasonable distance_ away from the start.
 
-Let's take the `x` coordinate as an example. If `x` is in the first half of the grid, we want the destination to be somewhere in the second half. So what is the range of possible targets for `x`?. If `x` is at the very beginning, we can consider the entire second half. If it's in the middle, the available range is from 3/4 of the grid towards the end. The inverse is true for when `x` is in the second half of the grid. The following method describes this relationship:
+Let's take the `x` coordinate as an example. If `x` is in the first half of the grid, we want the destination to be somewhere in the second half. So what is the range of possible targets for `x`?. If `x` is at the very edge of the map, we can consider the entire second half. If it's in the middle, the available range is from 3/4 of the grid towards the end. The inverse is true for when `x` is in the second half of the grid. The following method describes this relationship:
 
 ```js
 export const getDestinationRange = (coord: number): [number, number] =>
