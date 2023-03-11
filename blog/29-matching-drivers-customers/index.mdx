@@ -91,7 +91,7 @@ dispatcher.on(
 );
 ```
 
-Drivers and customers are being matched. Of course, our method has limitations. We are always prioritizing the oldest customer request, potentially at the expense of other customers. Rather than matching the oldest one first, we could evaluate several requests at once and find a matching that minimizes the average distance across all of them. Also, we should set a limit on how far a driver is willing to travel to pick up a customer. But as a first stab at this problem, this is good enough!
+Drivers and customers are now being matched. Of course, our method has limitations. We are always prioritizing the oldest customer request, potentially at the expense of other customers. Rather than matching the oldest one first, we could evaluate several requests at once and find a matching that minimizes the average distance across all of them. Also, we should set a limit on how far a driver is willing to travel to pick up a customer. But as a first stab at this problem, this is good enough!
 
 ```
 2023-03-10 21:02:33 Matched William <> Alice | distance: 32
