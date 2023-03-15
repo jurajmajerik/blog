@@ -33,7 +33,7 @@ const Layout = ({ children }) => (
             <div className="mt-6 space-y-7 text-sm text-zinc-600 dark:text-zinc-400">
               <p>
                 I&#39;m Juraj, a software engineer based in Amsterdam. I write
-                about building distributed systems.
+                about building scalable systems.
               </p>
 
               <p>
