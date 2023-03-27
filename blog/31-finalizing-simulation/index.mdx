@@ -1,0 +1,140 @@
+---
+slug: "finalizing-simulation"
+title: "#33 Finalizing the simulation"
+date: "2023-03-27"
+branch: "finalizing-simulation"
+tags: ["node.js", "ui"]
+---
+
+Finally, the time has come - let's put all the components of our simulation together.
+
+_Not all of the following code is entirely new. Still, let's walk through it again and understand how the components fit together._
+
+Every 200 ms, the customer refreshes itself. It only makes new decisions if it's not waiting for a result of an asynchronous operation (`this.busy === false`). If the customer is missing the location, it sets a random one and also requests a destination at a reasonable distance away. Finally, if they are not matched with a driver yet, they request a matching.
+
+```js
+private async simulate(): Promise<void> {
+  // Refresh every 200ms
+  while (true) {
+    await wait(200);
+
+    // Only make new decisions if not currently waiting for a result
+    // of an asynchronous operation
+    if (!this.busy) {
+      // Not active, reactivate with some probability
+      if (!this.active) {
+        if (g.activeCustomers.size < maxActiveCustomers) {
+          let newActive = false;
+          newActive = decide(5);
+          if (newActive) {
+            this.active = true;
+            this.updateDB();
+          }
+        }
+      } else if (this.active && !this.location) {
+        // No location yet -> set location, request destination
+        this.busy = true;
+
+        const location = g.roadNodes[getRandomInt(0, g.roadNodes.length - 1)];
+        this.location = location;
+        g.activeCustomers.set(this.customerId, location);
+
+        g.getDestination.send({
+          customerId: this.customerId,
+          location: this.location,
+        });
+      } else if (this.active && !this.driverId) {
+        // Match with a driver
+        this.busy = true;
+        g.dispatcher.send({
+          from: 'customer',
+          data: {
+            customerId: this.customerId,
+            name: this.name,
+            location: this.location,
+          },
+        });
+      }
+    }
+  }
+}
+```
+
+Additionally, the customer also exposes the `deactivate` method. The driver calls this method once he delivers the customer to the destination, deactivating them in the process.
+
+```js
+public deactivate(): void {
+  g.activeCustomers.delete(this.customerId);
+
+  this.active = false;
+  this.location = null;
+  this.destination = null;
+  this.driverId = null;
+  this.updateDB();
+}
+```
+
+Now let's turn to the driver. Based on the current driver's state, we do one of the following actions:
+
+- Request matching with a customer
+- Request the route toward the customer
+- Advance the car on the path
+- Request the route toward the destination
+- Deactivate the customer and reset the state after arriving at the destination
+
+```js
+private simulate = async (): Promise<void> => {
+  while (true) {
+    await wait(200);
+
+    if (!this.busy) {
+      if (!this.customerId) {
+        // Match with a customer
+        this.busy = true;
+        this.requestMatch();
+      } else if (this.customerId && !this.path) {
+        // Request path to the customer
+        this.busy = true;
+        this.requestRoute(this.customerLocation);
+      } else if (this.path && !this.isDestinationReached()) {
+        // Move to next location on the path
+        this.pathIndex++;
+        this.location = this.path[this.pathIndex];
+
+        this.updateDB();
+      } else if (this.path && this.isDestinationReached()) {
+        if (this.status === 'pickup') {
+          // Customer reached, request route towards customer's destination
+          await wait(3000);
+
+          this.busy = true;
+          const customerDestination =
+            g.customerInstances[this.customerId].destination;
+          this.requestRoute(customerDestination);
+        } else if (this.status === 'enroute') {
+          // Customer's destination reached, reset state, deactivate customer
+          await wait(3000);
+
+          g.customerInstances[this.customerId].deactivate();
+
+          this.status = 'idle';
+          this.customerId = null;
+          this.path = null;
+          this.pathIndex = null;
+          this.updateDB();
+
+          await wait(2000);
+        }
+      }
+    }
+  }
+};
+```
+
+Notice we've added some arbitrary delays during pickup and dropoff. This simulates the extra time needed to perform these actions.
+
+And here's what it looks like. Besides the simulation, our map also got a refreshed look!
+
+`youtube: https://youtu.be/KdX0Si1Vuo0`
+
+Unfortunately, you may notice the animation is getting laggy with more objects on the map. I've looked into this, and it seems the current way of updating the SVGs via JavaScript is not optimal. CSS animations are the way to go here. Let's tackle this issue in one of the next posts.
