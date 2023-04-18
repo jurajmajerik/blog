@@ -1,0 +1,50 @@
+---
+slug: "monitoring-logging"
+title: "#34 Monitoring & logging"
+date: "2023-04-18"
+branch: "monitoring-logging"
+tags: ["sysadmin"]
+---
+
+Now that our simulation is running let's set up monitoring and logging to track the performance of our system.
+
+Of course, one can always peek at the server without fancy tools. With Docker applications, we can use the `docker logs` command to view the logs of any container. To check for the memory or CPU consumption, we can simply use `htop`.
+
+In a distributed system, however, this quickly becomes cumbersome. If the system as a whole is failing, we might potentially need to walk through every individual component to diagnose the issue.
+
+So here's a better solution - let's use Prometheus and Grafana to implement monitoring and logging. This will provide us all the information we need at our fingertips.
+
+The monitoring stack consists of the following components:
+
+- **_Prometheus_** is the server that collects metrics from various sources and stores them in a way they are available for querying. We will use three exporters: _node_exporter_, _cadvisor_ and _postgres_exporter_.
+- **_node_exporter_** exposes system-level metrics, such as CPU and memory usage.
+- **_cadvisor_** provides container-level metrics
+- **_postgres_exporter_** exposes PostgreSQL metrics
+- **_Grafana_** is the dashboard that fetches data from the Prometheus server and displays it in a customizable UI.
+- **_Promtail_** collects logs from various sources, and forwards them to the Loki server for storage.
+- **_Loki_** efficiently stores the logs, indexes them for fast retrieval, and provides APIs for querying them from the Grafana dashboard.
+
+Each of the list items above is its own Docker container. To isolate this from our main application stack, I've put all configuration files and the docker-compose files into the new `monitor` folder.
+
+I recommend to have a look at the config files to get a better understanding of how the system is wired up. That said, these are some of the key points of the setup:
+
+- Prometheus scrapes metrics from the exporters. It needs to know their address (localhost + port). The scraping happens every couple of seconds, but this is configurable. Prometheus then exposes the data via an API at `localhost:9090`.
+- The Prometheus exporters Prometheus scrape the data from the log files stored in the system. Therefore the log files need to be mounted as their volumes (as read-only).
+- Promtail is highly customizable, allowing us to add various metadata to logs, such as labels (see the pipeline*stages section of \_promtail* config file). This makes logs easy to query.
+- Grafana exposes the dashboard at `localhost:3000`. Requests to `rides.jurajmajerik.com/grafana` are reverse-proxied to `localhost:3000`, returning the dashboard to the user.
+
+Once set up, we can open up our Grafana dashboard, connect data sources (Prometheus & Loki), and add visualization panels. For any panel, we use _queries_ to fetch data from the metrics server. For example, to fetch the memory consumption of our database container, we can use `container_memory_rss{name="rides-db-1"}`.
+
+![grafana memory](./img-1.png)
+
+The process works similarly for logs. Having tagged our logs with the container name, we can query logs based this parameter.
+
+![grafana server logs](./img-2.png)
+
+I recommend [this](https://www.youtube.com/watch?v=9TJx7QTrTyo) and [this](https://www.youtube.com/watch?v=h_GGd7HfKQ8) video as a primer on the subject. If you run into issues, check out the GitHub Issues page of Grafana, Prometheus, or any other relevant component. Someone else has likely had a similar problem before you.
+
+Setting up Grafana & Prometheus stack is quite involved, and it took me some time to get it to a working state. Don't be discouraged with the sheer amount of configuration. It just requires a bit of persistence, tackling all the "wiring" details individually. The comprehensive overview of your system's behavior is well worth the effort.
+
+Finally, I integrated the monitoring dashboard in the app UI with an iframe.
+
+![grafana server logs](./img-3.png)

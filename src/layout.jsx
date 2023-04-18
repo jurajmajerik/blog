@@ -46,7 +46,6 @@ const Layout = ({ children }) => (
                 >
                   &nbsp;ride-hailing app
                 </a>
-                {/* . Read more in the design document and about my motivation for doing this. */}
                 .
               </p>
 

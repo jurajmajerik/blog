@@ -2,11 +2,12 @@
 slug: "environment-variables"
 title: "#9 Environment variables"
 date: "2022-10-23"
-tags: ['go', 'bash']
+tags: ["go", "sysadmin"]
 ---
-Let's make our server aware of its environment. On our local machine, we want to listen on our local port ```8080```. On the production server, we want to use HTTPS and port ```443```.
 
-We need to use environment variables to set this context. These variables are loaded whenever a shell is started. On macOS, I added the following line to my ```.zprofile``` script. This is a script that runs whenever ```zshell``` (which is what I use) opens. If you use the regular bash, you want to edit ```.bash_profile```.
+Let's make our server aware of its environment. On our local machine, we want to listen on our local port `8080`. On the production server, we want to use HTTPS and port `443`.
+
+We need to use environment variables to set this context. These variables are loaded whenever a shell is started. On macOS, I added the following line to my `.zprofile` script. This is a script that runs whenever `zshell` (which is what I use) opens. If you use the regular bash, you want to edit `.bash_profile`.
 
 ```
 nano .zprofile
@@ -14,16 +15,17 @@ nano .zprofile
 export SERVER_ENV="DEV"
 ```
 
-On our production server, we need to make the variable visible to the root. Remember - we are running our server with ```sudo```. The file we need to edit is ```/etc/environment```. We can omit the ```export``` bit.
+On our production server, we need to make the variable visible to the root. Remember - we are running our server with `sudo`. The file we need to edit is `/etc/environment`. We can omit the `export` bit.
+
 ```
 sudo nano /etc/environment
 ...
 SERVER_ENV="PROD"
 ```
 
-We need to log out and back in for our changes to take effect. But before that, let's adjust our server code. We can access the environment variable with the ```os.Getenv()``` method. In the code, I added a simple if statement - if the variable is ```DEV```, let's run a local server with HTTP. If it's ```PROD```, let's listen on a different port with HTTPS.
+We need to log out and back in for our changes to take effect. But before that, let's adjust our server code. We can access the environment variable with the `os.Getenv()` method. In the code, I added a simple if statement - if the variable is `DEV`, let's run a local server with HTTP. If it's `PROD`, let's listen on a different port with HTTPS.
 
-The adjusted ```main()``` function is below.
+The adjusted `main()` function is below.
 
 ```go
 func main() {
@@ -44,4 +46,4 @@ func main() {
 }
 ```
 
-We can now test our code. Run it locally, then deploy with ```scp``` and test on the production server. Both local and production endpoint should now return ```Hello world```.
+We can now test our code. Run it locally, then deploy with `scp` and test on the production server. Both local and production endpoint should now return `Hello world`.

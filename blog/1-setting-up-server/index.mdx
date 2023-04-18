@@ -2,13 +2,14 @@
 slug: "setting-up-server"
 title: "#1 Setting up a server"
 date: "2022-10-14"
-tags: ['bash']
+tags: ["sysadmin"]
 ---
+
 Let's set up a server on Digital Ocean. For now, the cheapest option with 1 GiB memory and 25 GiB disk will be more than enough. After setting it up with a fresh installation of Ubuntu 20.04, we can preview our server in the Digital Ocean dashboard.
 
 ![Digital Ocean server](./server-1.png)
 
-The important part is the ```IPv4``` address. We can access our server at this address, via the ```ssh``` command. Out of the box, the Ubuntu server on the Digital Ocean only has the ```root``` user. We need to prefix the user name before the address bit.
+The important part is the `IPv4` address. We can access our server at this address, via the `ssh` command. Out of the box, the Ubuntu server on the Digital Ocean only has the `root` user. We need to prefix the user name before the address bit.
 
 ```
 ssh root@178.62.242.234
@@ -18,7 +19,7 @@ Once we type in the password, we're inside of our server.
 
 ```
 ➜  ~ ssh root@178.62.242.234
-root@178.62.242.234's password: 
+root@178.62.242.234's password:
 Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-110-generic x86_64)
 ...
 ```

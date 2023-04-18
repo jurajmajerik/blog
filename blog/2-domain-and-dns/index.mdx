@@ -2,13 +2,14 @@
 slug: "domain-and-dns"
 title: "#2 Domain & DNS"
 date: "2022-10-15"
-tags: ['bash']
+tags: ["sysadmin"]
 ---
+
 Let's connect a domain to our server. This will save us from having to type the IP address when logging in and calling our server's APIs in the future.
 
-I already own the domain __jurajmajerik.com__. I'm just going to add the ```api.``` prefix before it and assign it to the server IP.
+I already own the domain **jurajmajerik.com**. I'm just going to add the `api.` prefix before it and assign it to the server IP.
 
-My domain is managed by GoDaddy. In their interface, I added a new [A record](https://support.dnsimple.com/articles/differences-between-a-cname-alias-url/) with the name ```api``` and pointed it to my server's IPv4 address.
+My domain is managed by GoDaddy. In their interface, I added a new [A record](https://support.dnsimple.com/articles/differences-between-a-cname-alias-url/) with the name `api` and pointed it to my server's IPv4 address.
 
 ![Godaddy DNS setup](./domain.png)
 
@@ -16,7 +17,7 @@ By doing this, we are updating the [Domain Name System (DNS)](https://aws.amazon
 
 ```
 ➜  ~ ssh root@api.jurajmajerik.com
-root@api.jurajmajerik.com's password: 
+root@api.jurajmajerik.com's password:
 Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-110-generic x86_64)
 ...
 ```

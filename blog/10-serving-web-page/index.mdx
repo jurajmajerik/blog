@@ -3,11 +3,12 @@ slug: "serving-web-page"
 title: "#10 Serving a web page"
 date: "2022-11-03"
 branch: "serving-web-page"
-tags: ['go', 'bash']
+tags: ["go", "sysadmin"]
 ---
-Let's set up the serving of our app's frontend. First, let's change the domain name of our server from ```api.jurajmajerik.com``` to a more fitting ```app.jurajmajerik.com```. At this point, it's okay to serve both the frontend and the APIs from the same server. We might separate them out later.
 
-To start, in the GoDaddy dashboard, we need to add a new [A record](https://support.dnsimple.com/articles/differences-between-a-cname-alias-url/) with the name ```app``` and point it to our server's IPv4 address.
+Let's set up the serving of our app's frontend. First, let's change the domain name of our server from `api.jurajmajerik.com` to a more fitting `app.jurajmajerik.com`. At this point, it's okay to serve both the frontend and the APIs from the same server. We might separate them out later.
+
+To start, in the GoDaddy dashboard, we need to add a new [A record](https://support.dnsimple.com/articles/differences-between-a-cname-alias-url/) with the name `app` and point it to our server's IPv4 address.
 
 ![Godaddy DNS setup](./img-1.png)
 
@@ -15,17 +16,17 @@ We also need to generate a new SSL certificate, as any certificate pertains to a
 
 ![HTTPS failure](./img-2.png)
 
-To solve this, we need to follow the steps described in the earlier [HTTPS](https://jurajmajerik.com/blog/using-https) article, substituting ```api``` with ```app```. We can then update the ```http.ListenAndServeTLS()``` method with the location of the newly generated certificate and the key.
+To solve this, we need to follow the steps described in the earlier [HTTPS](https://jurajmajerik.com/blog/using-https) article, substituting `api` with `app`. We can then update the `http.ListenAndServeTLS()` method with the location of the newly generated certificate and the key.
 
-Next, let's set up a ```static``` folder in our ```server``` directory. Here we can place an ```index.html``` file with a simple "Hello world" message. In the future, we will serve any frontend files such as *.css*, *.js*, or any assets from this folder.
+Next, let's set up a `static` folder in our `server` directory. Here we can place an `index.html` file with a simple "Hello world" message. In the future, we will serve any frontend files such as _.css_, _.js_, or any assets from this folder.
 
-The code to serve frontend files is a simple one-liner added to the main function. At the ```/``` path, let's serve all of the files in the ```static``` folder:
+The code to serve frontend files is a simple one-liner added to the main function. At the `/` path, let's serve all of the files in the `static` folder:
 
 ```go
 http.Handle("/", http.FileServer(http.Dir("./static")))
 ```
 
-Let's first run ```main.go``` locally and check if the file is being served at ```localhost:8080```. Then, let's deploy it to the production server and start the server script there.
+Let's first run `main.go` locally and check if the file is being served at `localhost:8080`. Then, let's deploy it to the production server and start the server script there.
 
 ![Serving web page](./img-3.png)
 
