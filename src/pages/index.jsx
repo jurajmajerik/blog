@@ -28,7 +28,7 @@ const colorClasses = {
 
 const Tag = ({ name, tags, active, onFilterChange }) => {
   const baseClasses =
-    "tag ml-3 text-xs inline-flex items-center font-semibold leading-sm px-2.5 py-0.5 uppercase rounded-full cursor-pointer border transition-colors";
+    "tag mb-2 lg:mb-0 ml-3 text-xs inline-flex items-center font-semibold leading-sm px-2.5 py-0.5 uppercase rounded-full cursor-pointer border transition-colors";
 
   const classObj = active ? colorClasses.active : colorClasses.inactive;
 
