@@ -3,7 +3,7 @@ import { graphql } from "gatsby";
 import Layout from "../../layout";
 
 const BranchNote = ({ branch }) => (
-  <div className="mt-4 text-slate-800 dark:text-slate-300">
+  <div className="mt-4 text-slate-800">
     <span className="italic">See the code for this post on the </span>
     <a
       className="font-medium text-blue-500 hover:text-blue-600"
@@ -26,12 +26,10 @@ const BlogPost = ({ data, children }) => {
   return (
     <Layout pageTitle={title}>
       <article className="">
-        <h1 className="text-2xl font-medium tracking-normal text-slate-800 dark:text-slate-100">
+        <h1 className="text-2xl font-medium tracking-normal text-slate-800">
           {frontmatter.title}
         </h1>
-        <small className="z-10 mt-1 text-sm text-slate-500 dark:text-slate-300">
-          {date}
-        </small>
+        <small className="z-10 mt-1 text-sm text-slate-500">{date}</small>
         {branch ? <BranchNote branch={branch} /> : null}
         <div className="prose dark mt-4">{children}</div>
         {branch ? <BranchNote branch={branch} /> : null}

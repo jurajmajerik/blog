@@ -65,13 +65,9 @@ const Filter = ({ tags, onFilterChange }) => {
       border
       border-slate-200
       p-2 leading-4
-      dark:border-slate-400
-      dark:bg-gray-800
     "
     >
-      <span className="ml-1 mt-1 text-sm text-slate-500 dark:text-slate-400">
-        Filter by topics
-      </span>
+      <span className="ml-1 mt-1 text-sm text-slate-500">Filter by topics</span>
       {items.map((item) => (
         <Tag
           key={item}
@@ -125,11 +121,9 @@ const IndexPage = ({ data }) => {
                     p-4
                     transition-all hover:border-slate-300
                     hover:drop-shadow-sm
-                    dark:border-slate-400
-                    dark:bg-gray-800
                   "
               >
-                <h3 className="text-base font-medium tracking-normal text-slate-800 dark:text-slate-100">
+                <h3 className="text-base font-medium tracking-normal text-slate-800">
                   {node.frontmatter.title}
                 </h3>
                 <div className="leading-4">
@@ -141,12 +135,10 @@ const IndexPage = ({ data }) => {
                       />
                     ))}
                 </div>
-                <small className="mt-1 text-sm text-slate-500 dark:text-slate-300">
+                <small className="mt-1 text-sm text-slate-500">
                   {node.frontmatter.date}
                 </small>
-                <p className="excerpt mt-1 text-sm text-slate-800 dark:text-slate-400">
-                  {excerpt}
-                </p>
+                <p className="excerpt mt-1 text-sm text-slate-800">{excerpt}</p>
                 <div
                   className="
                     absolute

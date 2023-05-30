@@ -22,15 +22,11 @@ const Layout = ({ children }) => (
           <div className="sticky top-0 w-full p-4 text-center">
             <div className="">
               <Link to="/">
-                <h1 className="text-2xl dark:text-white">Juraj Majerik</h1>
+                <h1 className="text-2xl">Juraj Majerik</h1>
               </Link>
             </div>
-            <StaticImage
-              className="img-profile mt-6 h-32 w-32 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
-              src="./bio.jpg"
-              alt="Profile photo"
-            />
-            <div className="mt-6 space-y-7 text-sm text-slate-800 dark:text-slate-400">
+            <StaticImage src="./bio.jpg" alt="Profile photo" />
+            <div className="mt-6 space-y-7 text-sm text-slate-800">
               <p>
                 I&#39;m Juraj, a software engineer based in Amsterdam. I write
                 about building scalable systems.
