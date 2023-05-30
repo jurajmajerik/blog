@@ -54,7 +54,7 @@ const TagMinimal = ({ name }) => {
 };
 
 const Filter = ({ tags, onFilterChange }) => {
-  const items = ["go", "node.js", "sql", "sysadmin", "docker", "ui"];
+  const items = ["go", "node.js", "sysadmin", "docker", "ui"];
 
   return (
     <div
