@@ -142,3 +142,6 @@ pre[class*="language-"] ::selection {
   padding: 0.15em 0.2em 0.05em;
   white-space: normal;
 }
+
+@media (prefers-color-scheme: dark) {
+}
