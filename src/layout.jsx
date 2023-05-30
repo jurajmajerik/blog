@@ -30,7 +30,7 @@ const Layout = ({ children }) => (
               src="./bio.jpg"
               alt="Profile photo"
             />
-            <div className="mt-6 space-y-7 text-sm text-zinc-800 dark:text-zinc-400">
+            <div className="mt-6 space-y-7 text-sm text-slate-800 dark:text-slate-400">
               <p>
                 I&#39;m Juraj, a software engineer based in Amsterdam. I write
                 about building scalable systems.
@@ -55,21 +55,21 @@ const Layout = ({ children }) => (
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <i className="fa-brands fa-twitter text-xl hover:text-zinc-700" />
+                  <i className="fa-brands fa-twitter text-xl hover:text-slate-700" />
                 </a>
                 <a
                   href="https://github.com/jurajmajerik"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <i className="fa-brands fa-github ml-2 text-xl hover:text-zinc-700" />
+                  <i className="fa-brands fa-github ml-2 text-xl hover:text-slate-700" />
                 </a>
                 <a
                   href="https://www.linkedin.com/in/jurajmajerik/"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <i className="fa-brands fa-linkedin ml-2 text-xl hover:text-zinc-700" />
+                  <i className="fa-brands fa-linkedin ml-2 text-xl hover:text-slate-700" />
                 </a>
               </p>
             </div>

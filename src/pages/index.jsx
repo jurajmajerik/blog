@@ -21,7 +21,7 @@ const colorClasses = {
     sysadmin:
       "bg-rose-50 border-rose-600 text-rose-600 hover:bg-rose-100 hover:border-rose-700 hover:text-rose-700",
     docker:
-      "bg-zinc-50 border-zinc-600 text-zinc-800 hover:bg-zinc-100 hover:border-zinc-700 hover:text-zinc-700",
+      "bg-zinc-50 border-zinc-600 text-slate-800 hover:bg-zinc-100 hover:border-zinc-700 hover:text-slate-700",
     ui: "bg-yellow-50 border-yellow-600 text-yellow-600 hover:bg-yellow-100 hover:border-yellow-700 hover:text-yellow-700",
   },
 };
@@ -69,7 +69,7 @@ const Filter = ({ tags, onFilterChange }) => {
       dark:bg-gray-800
     "
     >
-      <span className="ml-1 mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+      <span className="ml-1 mt-1 text-sm text-slate-500 dark:text-slate-400">
         Filter by topics
       </span>
       {items.map((item) => (
@@ -129,7 +129,7 @@ const IndexPage = ({ data }) => {
                     dark:bg-gray-800
                   "
               >
-                <h3 className="text-base font-medium tracking-normal text-zinc-800 dark:text-zinc-100">
+                <h3 className="text-base font-medium tracking-normal text-slate-800 dark:text-slate-100">
                   {node.frontmatter.title}
                 </h3>
                 <div className="leading-4">
@@ -141,10 +141,10 @@ const IndexPage = ({ data }) => {
                       />
                     ))}
                 </div>
-                <small className="mt-1 text-sm text-zinc-500 dark:text-zinc-300">
+                <small className="mt-1 text-sm text-slate-500 dark:text-slate-300">
                   {node.frontmatter.date}
                 </small>
-                <p className="excerpt mt-1 text-sm text-zinc-800 dark:text-zinc-400">
+                <p className="excerpt mt-1 text-sm text-slate-800 dark:text-slate-400">
                   {excerpt}
                 </p>
                 <div
