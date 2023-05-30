@@ -15,8 +15,12 @@ p.excerpt {
   -webkit-box-orient: vertical;
 }
 
+body {
+  background-color: #fff;
+}
+
 .container {
-  background-color: white;
+  background-color: #fff;
 }
 
 .prose p {
