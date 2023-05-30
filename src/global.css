@@ -15,6 +15,10 @@ p.excerpt {
   -webkit-box-orient: vertical;
 }
 
+.container {
+  background-color: white;
+}
+
 .prose p {
   margin-top: 1rem;
   margin-bottom: 1rem;
