@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Menlo';
+  font-family: "Menlo";
   src: url(/fonts/Menlo-Regular.woff) format("woff");
 }
 
@@ -18,7 +18,7 @@ p.excerpt {
 .prose p {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  color: #52525b;
+  color: #1e293b;
 }
 
 .prose a {
@@ -32,7 +32,7 @@ p.excerpt {
 }
 
 .prose ul {
-  color: #52525b;
+  color: #1e293b;
   list-style-type: disc;
   list-style-position: inside;
 }

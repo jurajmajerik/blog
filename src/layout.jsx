@@ -30,7 +30,7 @@ const Layout = ({ children }) => (
               src="./bio.jpg"
               alt="Profile photo"
             />
-            <div className="mt-6 space-y-7 text-sm text-zinc-600 dark:text-zinc-400">
+            <div className="mt-6 space-y-7 text-sm text-zinc-800 dark:text-zinc-400">
               <p>
                 I&#39;m Juraj, a software engineer based in Amsterdam. I write
                 about building scalable systems.
