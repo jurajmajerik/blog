@@ -47,20 +47,6 @@ p.excerpt {
   margin-bottom: 30px !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #111827;
-  }
-
-  .prose p {
-    color: #cbd5e1;
-  }
-
-  .prose li {
-    color: #a0aec0;
-  }
-}
-
 .tag {
   user-select: none;
 }

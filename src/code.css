@@ -27,14 +27,14 @@ pre[class*="language-"] {
 /* Code blocks */
 pre[class*="language-"] {
   padding: 1em;
-  margin: .5em 0;
+  margin: 0.5em 0;
   overflow: auto;
 }
 
 /* Inline code */
 :not(pre) > code[class*="language-"] {
-  padding: .1em;
-  border-radius: .3em;
+  padding: 0.1em;
+  border-radius: 0.3em;
   white-space: normal;
 }
 
@@ -127,8 +127,8 @@ pre[class*='language-'] ::-moz-selection {
   background: hsla(0, 0%, 100%, 0.15);
 }
 
-pre[class*='language-']::selection,
-pre[class*='language-'] ::selection {
+pre[class*="language-"]::selection,
+pre[class*="language-"] ::selection {
   text-shadow: none;
   background: hsla(0, 0%, 100%, 0.15);
 }
@@ -141,11 +141,4 @@ pre[class*='language-'] ::selection {
   color: #1a1a1a;
   padding: 0.15em 0.2em 0.05em;
   white-space: normal;
-}
-
-@media (prefers-color-scheme: dark) {
-  :not(pre) > code {
-    background: #222529;
-    color: #e8912d;
-  }
 }
