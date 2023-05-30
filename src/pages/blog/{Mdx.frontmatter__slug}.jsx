@@ -31,7 +31,7 @@ const BlogPost = ({ data, children }) => {
         </h1>
         <small className="z-10 mt-1 text-sm text-slate-500">{date}</small>
         {branch ? <BranchNote branch={branch} /> : null}
-        <div className="prose dark mt-4">{children}</div>
+        <div className="prose mt-4">{children}</div>
         {branch ? <BranchNote branch={branch} /> : null}
       </article>
     </Layout>
