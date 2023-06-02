@@ -44,7 +44,7 @@ const Layout = ({ children }) => (
                   target="_blank"
                   rel="noreferrer"
                 >
-                  &nbsp;ride-hailing app
+                  &nbsp;ridesharing app
                 </a>
                 .
               </p>
