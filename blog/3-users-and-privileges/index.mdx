@@ -49,6 +49,14 @@ root@server:~# id juraj
 uid=1000(juraj) gid=1000(juraj) groups=1000(juraj),27(sudo)
 ```
 
+Next, we need to copy the SSH folder and assign the appropriate permissions to our new user.
+
+```
+root@server:~# mkdir /home/juraj/.ssh
+root@server:~# cp -Rfv /root/.ssh /home/juraj/
+root@server:~# chown -Rfv juraj:juraj /home/juraj/.ssh
+```
+
 Now I can login to my server as `juraj`:
 
 ```
