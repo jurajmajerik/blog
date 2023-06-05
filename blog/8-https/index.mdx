@@ -18,7 +18,7 @@ These files will be updated when the certificate renews.
 Certbot has set up a scheduled task to automatically renew this certificate in the background.
 ```
 
-Let's now revisit our server code stored on our local machine. We need to switch to the `ListenAndServeTLS()` method. This method requires the port number (433 for HTTPS), the location of the certification file, and the private key file.
+Let's now revisit our server code stored on our local machine. We need to switch to the `ListenAndServeTLS()` method. This method requires the port number (443 for HTTPS), the location of the certification file, and the private key file.
 
 ```go
 http.ListenAndServeTLS(
