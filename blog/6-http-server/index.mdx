@@ -19,7 +19,7 @@ func getData(w http.ResponseWriter, req *http.Request) {
 We register our handler by calling ```http.HandleFunc()``` method, passing the path and the handler itself.
 
 ```go
-http.HandleFunc("/data", headers)
+http.HandleFunc("/data", getData)
 ```
 
 Finally, we define a port to listen to:
