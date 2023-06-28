@@ -8,6 +8,8 @@ We're going to use the native ```http``` module to set up our first endpoint. Th
 
 A handler function takes ```http.ResponseWriter``` and ```http.Request``` arguments. The second argument is passed as a pointer. I don't know why that is. One reason could be that it allows to modify it, although I don't see why we would want to do that to an HTTP request object. A more likely explanation is that passing it by value would lead to copying the entire request object, which might be expensive. I'll update this section once I learn more.
 
+More: ["Because it's a large struct. Copying it would be expensive. So it's a pointer to a struct, which is common in Go when structs are large."](https://stackoverflow.com/questions/31145564/why-must-the-http-request-argument-be-a-pointer)
+
 We write the response from the handler using the ```fmt.Fprintf``` method. This method takes as its first parameter an instance of ```http.ResponseWriter```. The second argument is the response itself.
 
 ```go
