@@ -81,7 +81,7 @@ We get back the process ID (PID): `2200302`. With a `ps -e` command, we can show
 
 For a reason I don't yet understand, our command seems to have started three processes: `sudo`, `go` and `main`. I'll update this section once I have the explanation for this.
 
-Note: `sudo` runs a seprate process for reasons described in (this superuser question)[https://superuser.com/questions/859701/why-does-sudo-fork-before-executing-the-process/859809#859809]. `go run` compiles your code, executes the resulting binary, and then cleans up the results of compilation. In order to do the cleanup afterwards it needs to use a `fork()` model since `exec()` would not remember to do the cleanup (somewhat similar to the above).
+Note: `sudo` runs a seprate process for reasons described in [this superuser question](https://superuser.com/questions/859701/why-does-sudo-fork-before-executing-the-process/859809#859809). `go run` compiles your code, executes the resulting binary, and then cleans up the results of compilation. In order to do the cleanup afterwards it needs to use a `fork()` model since `exec()` would not remember to do the cleanup (somewhat similar to the above).
 
 We can stop a running process with a `kill <PID>`. To stop our server, we need to target the `main` process:
 
