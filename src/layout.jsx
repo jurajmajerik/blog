@@ -37,14 +37,14 @@ const Layout = ({ children }) => (
               </p>
 
               <p>
-                Currently working on a clone of a
+                Currently working on a
                 <a
                   className="text-blue-500 transition-colors hover:text-blue-600"
                   href="https://rides.jurajmajerik.com"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  &nbsp;ridesharing app
+                  &nbsp;ridesharing simulation
                 </a>
                 .
               </p>
