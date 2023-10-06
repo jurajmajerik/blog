@@ -9,19 +9,6 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: "gatsby-plugin-posthog",
-      options: {
-        // Specify the API key for your PostHog Project (required)
-        apiKey: "phc_2jx6DBE8kQcju3XM9NACr0QrNvEdgxWQfQbe9lI3H3I",
-        // Specify the app host if self-hosting (optional, default: https://app.posthog.com)
-        apiHost: "https://app.posthog.com",
-        // Puts tracking script in the head instead of the body (optional, default: true)
-        head: true,
-        // Enable posthog analytics tracking during development (optional, default: false)
-        isEnabledDevMode: true,
-      },
-    },
-    {
       resolve: "gatsby-plugin-mdx",
       options: {
         gatsbyRemarkPlugins: [

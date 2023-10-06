@@ -23,7 +23,6 @@
     "gatsby-plugin-manifest": "^5.7.0",
     "gatsby-plugin-mdx": "^5.0.0",
     "gatsby-plugin-netlify": "^5.1.0",
-    "gatsby-plugin-posthog": "^1.0.1",
     "gatsby-plugin-sass": "^6.0.0",
     "gatsby-plugin-sharp": "^5.0.0",
     "gatsby-plugin-web-font-loader": "^1.0.4",
