@@ -12,6 +12,7 @@ const colorClasses = {
     ui: "bg-yellow-500 text-white border-transparent",
     sysadmin: "bg-red-400 text-white border-transparent",
     docker: "bg-zinc-500 text-white border-transparent",
+    misc: "bg-indigo-500 text-white border-transparent",
   },
   inactive: {
     go: "bg-blue-50 border-blue-600 text-blue-600 hover:bg-blue-100 hover:border-blue-700 hover:text-blue-700 transition-colors",
@@ -23,6 +24,7 @@ const colorClasses = {
     docker:
       "bg-zinc-50 border-zinc-600 text-slate-800 hover:bg-zinc-100 hover:border-zinc-700 hover:text-slate-700",
     ui: "bg-yellow-50 border-yellow-600 text-yellow-600 hover:bg-yellow-100 hover:border-yellow-700 hover:text-yellow-700",
+    misc: "bg-indigo-50 border-indigo-600 text-indigo-600 hover:bg-indigo-100 hover:border-indigo-700 hover:text-indigo-700",
   },
 };
 
@@ -54,7 +56,7 @@ const TagMinimal = ({ name }) => {
 };
 
 const Filter = ({ tags, onFilterChange }) => {
-  const items = ["go", "node.js", "sysadmin", "docker", "ui"];
+  const items = ["go", "node.js", "sysadmin", "docker", "ui", "misc"];
 
   return (
     <div
