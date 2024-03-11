@@ -1,5 +1,5 @@
 import * as React from "react";
-import { graphql } from "gatsby";
+import { Link, graphql } from "gatsby";
 import Layout from "../../layout";
 
 const BranchNote = ({ branch }) => (
@@ -23,6 +23,19 @@ const BlogPost = ({ data, children }) => {
   const { frontmatter } = mdx;
   const { title, date, branch } = frontmatter;
 
+  const posts = data.allMdx.edges;
+  const currentIndex = posts.findIndex(
+    (post) => post.node.frontmatter.slug === frontmatter.slug
+  );
+  const previous =
+    currentIndex !== -1 && currentIndex < posts.length - 1
+      ? posts[currentIndex + 1].node
+      : null;
+  const next =
+    currentIndex !== -1 && currentIndex > 0
+      ? posts[currentIndex - 1].node
+      : null;
+
   return (
     <Layout pageTitle={title}>
       <article className="">
@@ -33,6 +46,24 @@ const BlogPost = ({ data, children }) => {
         {branch ? <BranchNote branch={branch} /> : null}
         <div className="prose mt-4">{children}</div>
         {branch ? <BranchNote branch={branch} /> : null}
+        <div className="mt-8 flex justify-between">
+          {previous && (
+            <Link
+              to={`/blog/${previous.frontmatter.slug}`}
+              className="font-medium text-blue-500 hover:text-blue-600"
+            >
+              Prev: {previous.frontmatter.title}
+            </Link>
+          )}
+          {next && (
+            <Link
+              to={`/blog/${next.frontmatter.slug}`}
+              className="font-medium text-blue-500 hover:text-blue-600"
+            >
+              Next: {next.frontmatter.title}
+            </Link>
+          )}
+        </div>
       </article>
     </Layout>
   );
@@ -46,6 +77,16 @@ export const query = graphql`
         slug
         title
         branch
+      }
+    }
+    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
+      edges {
+        node {
+          frontmatter {
+            title
+            slug
+          }
+        }
       }
     }
   }
