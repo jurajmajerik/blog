@@ -30,23 +30,44 @@ const Layout = ({ children }) => (
               src="./bio.jpg"
               alt="Profile photo"
             />
-            <div className="mt-6 space-y-7 text-sm text-slate-800">
+            <div className="mt-6 space-y-7 text-sm text-slate-600">
               <p>
                 I&#39;m Juraj, a software engineer based in Amsterdam. I write
-                about building scalable systems.
+                about building great products.
               </p>
 
               <p>
-                Currently working on a
+              I'm currently building Experiments at
+              <a
+                  className="text-blue-500 transition-colors hover:text-blue-600"
+                  href="https://posthog.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  &nbsp;PostHog
+                </a>
+              , the most loved product & data toolkit for engineers. We are open source and used by 70,000+ teams.
+              </p>
+
+              <p>
+                In the past, I built a
                 <a
                   className="text-blue-500 transition-colors hover:text-blue-600"
                   href="https://rides.jurajmajerik.com"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  &nbsp;ridesharing simulation
+                  &nbsp;rides simulation&nbsp;
                 </a>
-                .
+                that got featured on
+                <a
+                  className="text-blue-500 transition-colors hover:text-blue-600"
+                  href="https://blog.pragmaticengineer.com/an-educational-side-project/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  &nbsp;The Pragmatic Engineer
+                </a>.
               </p>
 
               <p className="mt-6">

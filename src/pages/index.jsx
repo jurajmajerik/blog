@@ -63,6 +63,7 @@ const Filter = ({ tags, onFilterChange }) => {
       className="
       relative
       m-2
+      mt-4
       rounded-md
       border
       border-slate-200
@@ -84,14 +85,17 @@ const Filter = ({ tags, onFilterChange }) => {
   );
 };
 
-const IndexPage = ({ data }) => {
+const RidesPage = ({ data }) => {
   const [tags, setTags] = useState([]);
 
   const handleFilterChange = (newTags) => {
     setTags(newTags);
   };
 
-  let nodes = data.allMdx.nodes.filter((node) => !node.frontmatter.hidden);
+  let nodes = data.allMdx.nodes.filter(
+    (node) =>
+      node.frontmatter.tab !== "experimentation" && !node.frontmatter.hidden
+  );
   if (tags.length) {
     nodes = nodes.filter((node) =>
       tags.some(
@@ -101,8 +105,23 @@ const IndexPage = ({ data }) => {
   }
 
   return (
-    <Layout>
+    <>
       <Filter tags={tags} onFilterChange={handleFilterChange} />
+      <p className="m-2 mt-4 rounded border p-4 text-sm text-slate-600">
+        <a
+          className="text-blue-500 transition-colors hover:text-blue-600"
+          href="https://rides.jurajmajerik.com"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Rides&nbsp;
+        </a>
+        is a full-stack simulation of a ridesharing app. This project is my take
+        on building and visualizing a scalable system. My motivation was to
+        implement various concepts from the domain of system design, including
+        containerization, multiprocessing and observability. This project took
+        approximately 300 hours of work.
+      </p>
       <div className="inline-grid w-full sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
         {nodes.map((node) => {
           let { excerpt } = node;
@@ -157,6 +176,115 @@ const IndexPage = ({ data }) => {
           );
         })}
       </div>
+    </>
+  );
+};
+
+const ExperimentationPage = ({ data }) => {
+  let nodes = data.allMdx.nodes.filter(
+    (node) =>
+      node.frontmatter.tab === "experimentation" && !node.frontmatter.hidden
+  );
+
+  return (
+    <>
+      <p className="m-2 mt-4 rounded border p-4 text-sm text-slate-600">
+        Experiments at PostHog are still in the early stages. We have a useful
+        product with a clear market fit, but there's still a long way to go to
+        make it world-class. Here, I'll share my learnings and practical tips as
+        we work towards this goal.
+      </p>
+      <div className="inline-grid w-full sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+        {nodes.map((node) => {
+          let { excerpt } = node;
+          excerpt = `${excerpt.substring(0, excerpt.length - 1)} ...`;
+
+          return (
+            <Link key={node.id} to={`blog/${node.frontmatter.slug}`}>
+              <article
+                className="
+                      relative
+                      m-2
+                      h-140
+                      overflow-hidden
+                      rounded-md
+                      border
+                      border-slate-200
+                      bg-white
+                      p-4
+                      transition-all hover:border-slate-300
+                      hover:drop-shadow-sm
+                    "
+              >
+                <h3 className="text-base font-medium tracking-normal text-slate-800">
+                  {node.frontmatter.title}
+                </h3>
+                <div className="leading-4">
+                  {node.frontmatter.tags &&
+                    node.frontmatter.tags.map((tagName) => (
+                      <TagMinimal
+                        key={`${node.frontmatter.id}-${tagName}`}
+                        name={tagName}
+                      />
+                    ))}
+                </div>
+                <small className="mt-1 text-sm text-slate-500">
+                  {node.frontmatter.date}
+                </small>
+                <p className="excerpt mt-1 text-sm text-slate-800">{excerpt}</p>
+                <div
+                  className="
+                      absolute
+                      bottom-0
+                      left-0
+                      right-0
+                      h-10
+                      rounded-b
+                      bg-white
+                      "
+                />
+              </article>
+            </Link>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
+const IndexPage = ({ data }) => {
+  const [activeTab, setActiveTab] = useState("rides");
+
+  const styles = {
+    default:
+      "me-2 inline-block rounded-t-lg border-b-2 border-transparent px-4 py-2 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer",
+    active:
+      "me-2 active inline-block rounded-t-lg border-b-2 border-blue-600 px-4 py-2 text-blue-600 dark:border-blue-500 dark:text-blue-500 cursor-pointer",
+  };
+
+  return (
+    <Layout>
+      <div className="m-2 border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+        <ul className="-mb-px flex flex-wrap">
+          <li
+            onClick={() => setActiveTab("experimentation")}
+            className={
+              activeTab === "experimentation" ? styles.active : styles.default
+            }
+          >
+            Experimentation
+          </li>
+          <li
+            onClick={() => setActiveTab("rides")}
+            className={activeTab === "rides" ? styles.active : styles.default}
+          >
+            Rides
+          </li>
+        </ul>
+      </div>
+
+      {activeTab === "rides" && <RidesPage data={data} />}
+      {activeTab === "experimentation" && <ExperimentationPage data={data} />}
     </Layout>
   );
 };
@@ -186,6 +314,7 @@ export const query = graphql`
           spoiler
           hidden
           tags
+          tab
         }
         internal {
           contentFilePath

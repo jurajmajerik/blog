@@ -42,15 +42,17 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
-    "eslint": "^8.27.0",
+    "eslint": "^8.47.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^5.1.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.5.0",
     "gatsby-plugin-postcss": "^6.0.0",
     "postcss": "^8.4.19",
-    "prettier": "^2.7.1",
+    "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "tailwindcss": "^3.2.4"
   }
